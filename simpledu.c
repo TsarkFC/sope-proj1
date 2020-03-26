@@ -5,6 +5,9 @@
 #include <unistd.h>
 #include <signal.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <linux/limits.h>
 
 //---Files
 #include "utils.h"
@@ -26,7 +29,7 @@ int main(int argc, char *argv[]){
     int all = 0;
     int b = 0;
     int B = 0; int Bsize = 0; // Bsize corresponds to block size indicated
-    int path = 0;
+    int path = 0; char pathAd[50];
     int L = 0;
     int S = 0;
     int mDepth = 0; int maxDepth = 0; //maxDepth corresponds to max depth value
@@ -60,7 +63,8 @@ int main(int argc, char *argv[]){
         //set for [-S]
         else if (strcmp(argv[i],"-S") == 0) S = 1;
 
-        else {
+        //set for [--max-depth=N]
+        else if (argv[i][0] == '-' && argv[i][1] == '-'){
             char maxD[13];
             slice_str(argv[i], maxD, 0, 11);
             if (strcmp(maxD, "--max-depth=") == 0){
@@ -69,20 +73,78 @@ int main(int argc, char *argv[]){
                 mDepth = 1;
             }
         }
+
+        //set for path
+        else{
+            path = 1;
+            strcpy(pathAd, argv[i]);
+        }
     }
 
-    init(all, b, B, Bsize, path, L, S, mDepth, maxDepth);
+    init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, pathAd);
 
     return 0;
 }
 
-int init(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, int maxDepth){
+int init(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, int maxDepth, char* pathAd){
     if (all) printf("Got all\n");
     if (b) printf("Got b\n");
     if (L) printf("Got -L\n");
     if (S) printf("Got -S\n");
     if (mDepth) printf("Got %d depth\n", maxDepth);
     if (B) printf("Got -B %d\n", Bsize);
+
+    DIR *dirp;
+    struct dirent *direntp;
+    struct stat stat_buf;
+    char *str;
+    char directoryname[150] = { '\0' };
+
+    if ((dirp = opendir(pathAd)) == NULL)
+    {
+        perror(pathAd);
+        exit(2);
+    }
+
+    while ((direntp = readdir(dirp)) != NULL){
+        char fp[PATH_MAX];
+        snprintf(fp, sizeof(fp), "%s/%s", pathAd, direntp->d_name);
+        if (lstat(fp, &stat_buf)==-1)
+        {
+            perror("lstat ERROR");
+            exit(3);
+        }
+        if (S_ISREG(stat_buf.st_mode)) {
+            long num = stat_buf.st_size;
+            str = "regular";
+
+            printf("%-25s - %s  size: %ld\n", direntp->d_name, str, num);
+        }
+        
+        else if (S_ISDIR(stat_buf.st_mode)) {
+            strcpy(directoryname, direntp->d_name);
+            if(directoryname[1] != '\0'){
+                if(directoryname[2] != '\0'){
+
+                    str = "directory";
+                    printf("%-25s - %s\n", direntp->d_name, str);
+                }
+            }
+            else if(directoryname[0] != '.' || directoryname[1] != '\0'){
+                if(directoryname[1] != '.' || directoryname[2] != '\0'){
+                    str = "directory";
+                    printf("%-25s - %s\n", direntp->d_name, str);
+                }
+            }
+            memset(directoryname, 0, sizeof(directoryname));
+        }
+        else {
+            str = "other";
+            printf("%-25s - %s\n", direntp->d_name, str);
+        }
+        
+    }
+    closedir(dirp);
 
     return 0;
 }
