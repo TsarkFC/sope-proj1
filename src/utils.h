@@ -54,5 +54,23 @@ void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int m
         cmd[i] = max;
     }
 
-    
+
+}
+
+void round_up_4096(long * num){
+    if(*num % 4096 != 0){
+        *num = (*num / 4096) * 4096 + 4096;
+    }
+}
+
+_Bool is_number(char*a){
+    if(strlen(a) == 0){
+        return 0;
+    }
+    for(int i = 0; i < strlen(a); i++){
+        if(!(a[i] > 57 && a[i] < 48)){
+            return 0;
+        }
+    }
+    return 1;
 }
