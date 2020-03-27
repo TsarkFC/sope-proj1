@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
     int all = 0;
     int b = 0;
     int B = 0; int Bsize = 0; // Bsize corresponds to block size indicated
-    int path = 0; char pathAd[50];
+    int path = 0; char pathAd[PATH_MAX];
     int L = 0;
     int S = 0;
     int mDepth = 0; int maxDepth = 0; //maxDepth corresponds to max depth value
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]){
 
     //interpret argv content
     for (int i = 2; i < argc; i++){
-        printf("Argument: %s\n", argv[i]);
+        //printf("Argument: %s\n", argv[i]);
 
         //set fot [-a] or [-all]
         if (strcmp(argv[i],"-a") == 0 || strcmp(argv[i],"-all") == 0) all = 1;
@@ -86,7 +86,8 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
-int init(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, int maxDepth, char* pathAd){
+int init(int all, int b, int B, int Bsize, int path, 
+            int L, int S, int mDepth, int maxDepth, char* pathAd){
     if (all) printf("Got all\n");
     if (b) printf("Got b\n");
     if (L) printf("Got -L\n");
@@ -99,6 +100,13 @@ int init(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, i
     struct stat stat_buf;
     char *str;
     char directoryname[150] = { '\0' };
+    
+    int status;
+    pid_t pid = 0;
+    char fp[PATH_MAX];
+    char paths[PATH_MAX];
+
+    int dir_count = 0;
 
     if ((dirp = opendir(pathAd)) == NULL)
     {
@@ -107,7 +115,6 @@ int init(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, i
     }
 
     while ((direntp = readdir(dirp)) != NULL){
-        char fp[PATH_MAX];
         snprintf(fp, sizeof(fp), "%s/%s", pathAd, direntp->d_name);
         if (lstat(fp, &stat_buf)==-1)
         {
@@ -122,18 +129,22 @@ int init(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, i
         }
         
         else if (S_ISDIR(stat_buf.st_mode)) {
+            dir_count++;
             strcpy(directoryname, direntp->d_name);
-            if(directoryname[1] != '\0'){
-                if(directoryname[2] != '\0'){
-
-                    str = "directory";
-                    printf("%-25s - %s\n", direntp->d_name, str);
-                }
-            }
-            else if(directoryname[0] != '.' || directoryname[1] != '\0'){
+            if(directoryname[0] != '.' || directoryname[1] != '\0'){
                 if(directoryname[1] != '.' || directoryname[2] != '\0'){
                     str = "directory";
                     printf("%-25s - %s\n", direntp->d_name, str);
+                    pid = fork();
+
+                    if (pid == 0){
+                        char* cmd[10];
+                        cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp, cmd);
+                        execvp("./simpledu", cmd);
+                    }
+                    else if (pid > 0){
+                        wait(&status);
+                    }
                 }
             }
             memset(directoryname, 0, sizeof(directoryname));
@@ -146,6 +157,10 @@ int init(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, i
     }
     closedir(dirp);
 
+    //waitpid(-1, &status, WUNTRACED);
+    //wait(&status);
+
     return 0;
 }
+
 
