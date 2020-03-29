@@ -81,6 +81,8 @@ int main(int argc, char *argv[]){
             path = 1;
             strcpy(pathAd, argv[i]);
         }
+
+        if (!path) strcpy(pathAd,".");
     }
 
     init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, pathAd);
@@ -106,7 +108,6 @@ int init(int all, int b, int B, int Bsize, int path,
     int status;
     pid_t pid = 0;
     char fp[PATH_MAX];
-    char paths[PATH_MAX];
 
     int dir_count = 0;
 
@@ -154,7 +155,14 @@ int init(int all, int b, int B, int Bsize, int path,
                     }
                     else if (pid > 0){
                         wait(&status);
-                        printf("%-8ld %s \n", stat_buf.st_size, fp);
+                        
+                        if (b && !B) 
+                            printf("%-8ld %s \n", stat_buf.st_size, fp);
+                        else{
+                            round_up_4096(&stat_buf.st_size);
+                            stat_buf.st_size = stat_buf.st_size / Bsize;
+                            printf("%-8ld %s \n", stat_buf.st_size, fp);
+                        }
                     }
                 }
             }
