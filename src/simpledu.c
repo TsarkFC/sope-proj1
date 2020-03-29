@@ -135,7 +135,6 @@ int init(int all, int b, int B, int Bsize, int path,
             strcpy(directoryname, direntp->d_name);
             if(directoryname[0] != '.' || directoryname[1] != '\0'){
                 if(directoryname[1] != '.' || directoryname[2] != '\0'){
-                    printf("%-8ld %s \n", stat_buf.st_size, fp);
                     pid = fork();
 
                     if (pid == 0){
@@ -145,6 +144,7 @@ int init(int all, int b, int B, int Bsize, int path,
                     }
                     else if (pid > 0){
                         wait(&status);
+                        printf("%-8ld %s \n", stat_buf.st_size, fp);
                     }
                 }
             }
