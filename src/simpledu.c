@@ -25,6 +25,12 @@
 
 int main(int argc, char *argv[]){
 
+    //TO KNOW WHAT IS RECEIVED THROUGHT EXEC
+    // for (int i = 0; i < argc; i++){
+    //     printf("%s ", argv[i]);
+    // }
+    // printf("\n");
+
     //'boolean' variable initialization
     int all = 0;
     int b = 0;
@@ -43,7 +49,6 @@ int main(int argc, char *argv[]){
 
     //interpret argv content
     for (int i = 2; i < argc; i++){
-        //printf("Argument: %s\n", argv[i]);
 
         //set fot [-a] or [-all]
         if (strcmp(argv[i],"-a") == 0 || strcmp(argv[i],"-all") == 0) all = 1;
@@ -67,7 +72,7 @@ int main(int argc, char *argv[]){
 
         //set for [--max-depth=N]
         else if (argv[i][0] == '-' && argv[i][1] == '-'){
-            char maxD[13];
+            char maxD[50];
             slice_str(argv[i], maxD, 0, 11);
             if (strcmp(maxD, "--max-depth=") == 0){
                 slice_str(argv[i], maxD, 12, 13);
@@ -81,9 +86,10 @@ int main(int argc, char *argv[]){
             path = 1;
             strcpy(pathAd, argv[i]);
         }
-
-        if (!path) strcpy(pathAd,".");
     }
+
+    //Set default path
+    if (!path) strcpy(pathAd,".");
 
     init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, pathAd);
 
@@ -104,12 +110,11 @@ int init(int all, int b, int B, int Bsize, int path,
     struct dirent *direntp;
     struct stat stat_buf;
     char directoryname[150] = { '\0' };
+    char main_directoryname[150] = { '\0' };
     
     int status;
     pid_t pid = 0;
     char fp[PATH_MAX];
-
-    int dir_count = 0;
 
     if ((dirp = opendir(pathAd)) == NULL)
     {
@@ -119,17 +124,18 @@ int init(int all, int b, int B, int Bsize, int path,
 
     while ((direntp = readdir(dirp)) != NULL){
         snprintf(fp, sizeof(fp), "%s/%s", pathAd, direntp->d_name);
-        if (lstat(fp, &stat_buf)==-1)
-        {
+
+        if (lstat(fp, &stat_buf)==-1){
             perror("lstat ERROR");
             exit(3);
         }
+
         if (S_ISREG(stat_buf.st_mode)) {
             long num = stat_buf.st_size;
 
             //send through pipe to main process
 
-            if (all) {
+            if (all && (!mDepth || maxDepth > 0)) {
                 if(b && !B){
                     printf("%-8ld %s \n", num, fp);
                 }
@@ -141,35 +147,33 @@ int init(int all, int b, int B, int Bsize, int path,
             }
         }
         
-        else if (S_ISDIR(stat_buf.st_mode)) {
-            dir_count++;
+        else if (S_ISDIR(stat_buf.st_mode) && (!mDepth || (maxDepth > 0))) {
             strcpy(directoryname, direntp->d_name);
-            if(directoryname[0] != '.' || directoryname[1] != '\0'){
-                if(directoryname[1] != '.' || directoryname[2] != '\0'){
-                    pid = fork();
+            if(check_point_folders(directoryname)){
+                pid = fork();
+                if (pid == 0 ){
+                    char* cmd[10];
+                    maxDepth--;
+                    cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp, cmd);
+                    execvp("./simpledu", cmd);
+                }
 
-                    if (pid == 0){
-                        char* cmd[10];
-                        cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp, cmd);
-                        execvp("./simpledu", cmd);
-                    }
-                    else if (pid > 0){
-                        wait(&status);
-                        
-                        if (b && !B) 
-                            printf("%-8ld %s \n", stat_buf.st_size, fp);
-                        else{
-                            round_up_4096(&stat_buf.st_size);
-                            stat_buf.st_size = stat_buf.st_size / Bsize;
-                            printf("%-8ld %s \n", stat_buf.st_size, fp);
-                        }
-                    }
+                else if (pid > 0){
+                    wait(&status);
                 }
             }
             memset(directoryname, 0, sizeof(directoryname));
         }
-        
     }
+
+    if (b && !B) 
+        printf("%-8ld %s \n", stat_buf.st_size, pathAd);
+    else{
+        round_up_4096(&stat_buf.st_size);
+        stat_buf.st_size = stat_buf.st_size / Bsize;
+        printf("%-8ld %s \n", stat_buf.st_size, pathAd);
+    }
+
     closedir(dirp);
 
     return 0;

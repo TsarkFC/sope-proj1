@@ -49,8 +49,10 @@ void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int m
         i++;
     }
     if (mDepth){
-        char max[100] = "--max-depth=";
-        int_to_char(maxDepth, max);
+        char max[100];
+        char no[100];
+        int_to_char(maxDepth, no);
+        sprintf(max, "%s%s", "--max-depth=",no);
         cmd[i] = max;
     }
 
@@ -73,4 +75,12 @@ _Bool is_number(char*a){
         }
     }
     return 1;
+}
+
+int check_point_folders(char* directoryname){
+    if(directoryname[0] != '.' || directoryname[1] != '\0'){
+        if(directoryname[1] != '.' || directoryname[2] != '\0')
+            return 1;
+    }
+    return 0;
 }
