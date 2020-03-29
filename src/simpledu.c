@@ -28,14 +28,14 @@ int main(int argc, char *argv[]){
     //'boolean' variable initialization
     int all = 0;
     int b = 0;
-    int B = 0; int Bsize = 0; // Bsize corresponds to block size indicated
+    int B = 0; int Bsize = 1024; // Bsize corresponds to block size indicated
     int path = 0; char pathAd[PATH_MAX];
     int L = 0;
     int S = 0;
     int mDepth = 0; int maxDepth = 0; //maxDepth corresponds to max depth value
 
     //worng usage
-    if (argc > 9 || argc < 2 || strcmp(argv[1], "-l") != 0){ 
+    if (argc > 10 || argc < 2 || strcmp(argv[1], "-l") != 0){ 
         write(STDOUT_FILENO, "USAGE: ./simpledu -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n",
         strlen("USAGE: ./simpledu -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n"));
         exit(1);
@@ -53,8 +53,10 @@ int main(int argc, char *argv[]){
 
         //set for [-B size]
         else if (strcmp(argv[i], "-B") == 0){
-            B = 1;
-            Bsize = atoi(argv[i+1]); i++;
+            if(is_number(argv[i+1]) == 1){
+                B = 1;
+                Bsize = atoi(argv[i+1]); i++;
+            }
         }
 
         //set for [-L]
@@ -126,8 +128,16 @@ int init(int all, int b, int B, int Bsize, int path,
 
             //send through pipe to main process
 
-            if (all) 
-                printf("%-8ld %s \n", num, fp);
+            if (all) {
+                if(b && !B){
+                    printf("%-8ld %s \n", num, fp);
+                }
+                else{
+                    round_up_4096(&num);
+                    num = num / Bsize;
+                    printf("%-8ld %s \n", num, fp);
+                }
+            }
         }
         
         else if (S_ISDIR(stat_buf.st_mode)) {
