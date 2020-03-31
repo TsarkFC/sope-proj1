@@ -81,6 +81,8 @@ int main(int argc, char *argv[]){
             }
         }
 
+        else if (atoi(argv[i])) break;
+
         //set for path
         else{
             path = 1;
@@ -135,6 +137,7 @@ int init(int all, int b, int B, int Bsize, int path,
 
         if (S_ISREG(stat_buf.st_mode)) {
             long num = stat_buf.st_size;
+            dirSize += num;
 
             if (all && (!mDepth || maxDepth > 0)) {
                 if(b && !B){
@@ -145,7 +148,6 @@ int init(int all, int b, int B, int Bsize, int path,
                     num = num / Bsize;
                     printf("%-8ld %s \n", num, fp);
                 }
-                dirSize += num;
             }
         }
         
@@ -158,6 +160,7 @@ int init(int all, int b, int B, int Bsize, int path,
                     if (mDepth) maxDepth--;
                     cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp, cmd);
                     dup2(pp[WRITE], STDOUT_FILENO);
+                    printf("Executing...\n");
                     execvp("./simpledu", cmd);
                 }
 
@@ -178,17 +181,6 @@ int init(int all, int b, int B, int Bsize, int path,
             memset(directoryname, 0, sizeof(directoryname));
         }
     }
-
-    //-------See pipe content
-    // close(pp[WRITE]);
-    // char content[MAX_INPUT];
-    // char* num;
-    // char copy[100];
-    // while (read(pp[READ], content, sizeof(content))){
-    //     printf("%s", content);
-    //     //get_first_nums(content, &dirSize);
-    // }
-    //-------
 
     if (b && !B){
         dirSize += stat_buf.st_size;

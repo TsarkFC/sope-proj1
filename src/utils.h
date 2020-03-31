@@ -52,14 +52,14 @@ void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int m
         i++;
     }
     if (mDepth){
+        printf("Does it get here??\n");
         char max[100];
         char no[100];
         int_to_char(maxDepth, no);
         sprintf(max, "%s%s", "--max-depth=",no);
         cmd[i] = max;
+        i++;
     }
-
-
 }
 
 void round_up_4096(long * num){
@@ -95,7 +95,6 @@ void line_divider(char content[], char** lines){
     while (line != NULL){
         lines[i] = malloc(sizeof(line));
         strcpy(lines[i], line);
-        printf("line_divider: %s\n", lines[i]);
         i++;
         line = strtok(NULL, "\n");
     }
