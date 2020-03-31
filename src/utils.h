@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define READ 0
+#define WRITE 1
+
 void slice_str(const char * str, char * buffer, size_t start, size_t end){
     size_t j = 0;
     for ( size_t i = start; i <= end; ++i ) {
@@ -83,4 +86,28 @@ int check_point_folders(char* directoryname){
             return 1;
     }
     return 0;
+}
+
+void line_divider(char content[], char** lines){
+    char* line;
+    line = strtok(content, "\n");
+    int i = 0;
+    while (line != NULL){
+        lines[i] = malloc(sizeof(line));
+        strcpy(lines[i], line);
+        printf("line_divider: %s\n", lines[i]);
+        i++;
+        line = strtok(NULL, "\n");
+    }
+}
+
+void add_initial_numbers(char** lines, int* dirSize){
+    int i = 0;
+    char* num;
+
+    while (lines[i] != NULL){
+        num = strtok(lines[i], " ");
+        i++;
+        *dirSize += atoi(num);
+    }
 }

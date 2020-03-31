@@ -110,11 +110,14 @@ int init(int all, int b, int B, int Bsize, int path,
     struct dirent *direntp;
     struct stat stat_buf;
     char directoryname[150] = { '\0' };
-    char main_directoryname[150] = { '\0' };
     
     int status;
     pid_t pid = 0;
     char fp[PATH_MAX];
+
+    int pp[2];
+    pipe(pp);
+    int dirSize = 0;
 
     if ((dirp = opendir(pathAd)) == NULL)
     {
@@ -133,8 +136,6 @@ int init(int all, int b, int B, int Bsize, int path,
         if (S_ISREG(stat_buf.st_mode)) {
             long num = stat_buf.st_size;
 
-            //send through pipe to main process
-
             if (all && (!mDepth || maxDepth > 0)) {
                 if(b && !B){
                     printf("%-8ld %s \n", num, fp);
@@ -144,6 +145,7 @@ int init(int all, int b, int B, int Bsize, int path,
                     num = num / Bsize;
                     printf("%-8ld %s \n", num, fp);
                 }
+                dirSize += num;
             }
         }
         
@@ -153,25 +155,50 @@ int init(int all, int b, int B, int Bsize, int path,
                 pid = fork();
                 if (pid == 0 ){
                     char* cmd[10];
-                    maxDepth--;
+                    if (mDepth) maxDepth--;
                     cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp, cmd);
+                    dup2(pp[WRITE], STDOUT_FILENO);
                     execvp("./simpledu", cmd);
                 }
 
                 else if (pid > 0){
                     wait(&status);
+
+                    close(pp[WRITE]);
+                    char content[MAX_INPUT];
+                    while (read(pp[READ], content, sizeof(content))){
+                        printf("%s", content);
+                        if (!S){
+                            char* lines[MAX_INPUT]; line_divider(content, lines);
+                            add_initial_numbers(lines, &dirSize);
+                        }
+                    }
                 }
             }
             memset(directoryname, 0, sizeof(directoryname));
         }
     }
 
-    if (b && !B) 
-        printf("%-8ld %s \n", stat_buf.st_size, pathAd);
+    //-------See pipe content
+    // close(pp[WRITE]);
+    // char content[MAX_INPUT];
+    // char* num;
+    // char copy[100];
+    // while (read(pp[READ], content, sizeof(content))){
+    //     printf("%s", content);
+    //     //get_first_nums(content, &dirSize);
+    // }
+    //-------
+
+    if (b && !B){
+        dirSize += stat_buf.st_size;
+        printf("%-8d %s \n", dirSize, pathAd);
+    }
     else{
         round_up_4096(&stat_buf.st_size);
         stat_buf.st_size = stat_buf.st_size / Bsize;
-        printf("%-8ld %s \n", stat_buf.st_size, pathAd);
+        dirSize += stat_buf.st_size;
+        printf("%-8d %s \n", dirSize, pathAd);
     }
 
     closedir(dirp);
