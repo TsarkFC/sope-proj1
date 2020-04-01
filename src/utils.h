@@ -1,6 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <signal.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <linux/limits.h>
+#include <errno.h>
+#include <fcntl.h>
 
 #define READ 0
 #define WRITE 1
@@ -93,20 +102,21 @@ void line_divider(char content[], char** lines){
     line = strtok(content, "\n");
     int i = 0;
     while (line != NULL){
-        lines[i] = malloc(sizeof(line));
+        lines[i] = malloc(strlen(line));
         strcpy(lines[i], line);
         i++;
         line = strtok(NULL, "\n");
     }
 }
 
-void add_initial_numbers(char** lines, int* dirSize){
+void add_initial_numbers(char** lines, int* dirSize, char* to, char* from){
     int i = 0;
     char* num;
 
     while (lines[i] != NULL){
         num = strtok(lines[i], " ");
         i++;
-        *dirSize += atoi(num);
     }
+    //printf("Adding: %s to %s from %s \n", num, to, from);
+    *dirSize += atoi(num);
 }
