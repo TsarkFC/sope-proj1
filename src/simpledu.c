@@ -13,7 +13,6 @@
 
 //---Files
 #include "utils.h"
-#include "simpledu.h"
 
 // ./simpledu -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]
 
@@ -26,6 +25,114 @@
 // • --max-depth=N – limita a informação exibida a N (0,1, …) níveis de profundidade de diretórios
 
 int file;
+
+int init(int all, int b, int B, int Bsize, int path, 
+            int L, int S, int mDepth, int maxDepth, char* pathAd){
+    /**USED FOR TESTING REASONS ONLY**/
+    //if (all) printf("Got all\n");
+    //if (b) printf("Got b\n");
+    //if (L) printf("Got -L\n");
+    //if (S) printf("Got -S\n");
+    //if (mDepth) printf("Got %d depth\n", maxDepth);
+    //if (B) printf("Got -B %d\n", Bsize);
+
+    DIR *dirp;
+    struct dirent *direntp;
+    struct stat stat_buf;
+    char directoryname[150] = { '\0' };
+    
+    int status;
+    pid_t pid = 0;
+    char fp[PATH_MAX];
+
+    int dirSize = 0;
+
+    if ((dirp = opendir(pathAd)) == NULL)
+    {
+        perror(pathAd);
+        exit(2);
+    }
+
+    while ((direntp = readdir(dirp)) != NULL){
+        int pp[2];
+        if (pipe(pp) == -1) printf("Pipe error %s\n", strerror(errno));
+
+        sprintf(fp, "%s/%s", pathAd, direntp->d_name);
+
+        if (lstat(fp, &stat_buf)==-1){
+            perror("lstat ERROR");
+            exit(3);
+        }
+
+        if (S_ISREG(stat_buf.st_mode)) {
+            long num = stat_buf.st_size;
+            char sendFile[50];
+
+            if (all && (!mDepth || maxDepth > 0)) {
+                if(!(b && !B)){
+                    round_up_4096(&num);
+                    num = num / Bsize;
+                }
+                sprintf(sendFile, "%-8ld %s \n", num, fp);
+                write(STDOUT_FILENO, sendFile, strlen(sendFile));
+            }
+            dirSize += num;
+        }
+        
+        else if (S_ISDIR(stat_buf.st_mode) && (!mDepth || (maxDepth > 0))) {
+
+            strcpy(directoryname, direntp->d_name);
+            if(check_point_folders(directoryname)){
+                pid = fork();
+
+                if (pid == 0 ){
+                    char* cmd[10];
+                    if (mDepth) maxDepth--;
+                    cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp, cmd);
+
+                    close(pp[READ]);
+                    if (dup2(pp[WRITE], STDOUT_FILENO) == -1) printf("Dup error %s\n", strerror(errno));
+                    execvp("./simpledu", cmd);
+                }
+
+                else if (pid > 0){
+                    wait(&status);
+
+                    close(pp[WRITE]);
+                    char content[PATH_MAX];
+                    while (read(pp[READ], content, PATH_MAX)){
+                        write(STDOUT_FILENO, content, strlen(content));
+                        write(file, content, strlen(content));
+                        if (!S){
+                            char* lines[MAX_INPUT]; line_divider(content, lines);
+                            add_initial_numbers(lines, &dirSize, pathAd, fp, file);
+                        }
+                        memset(content, 0, sizeof(content));
+                    }
+                    write(file, "\n", 1);
+                }
+            }
+            memset(directoryname, 0, sizeof(directoryname));
+        }
+    }
+
+    if (b && !B){
+        //dirSize += stat_buf.st_size;
+        dirSize += 4096;
+    }
+    else{
+        round_up_4096(&stat_buf.st_size);
+        stat_buf.st_size = stat_buf.st_size / Bsize;
+        dirSize += stat_buf.st_size;
+    }
+    char sendDir[50];
+    sprintf(sendDir,"%-8d %s \n", dirSize, pathAd);
+    write(STDOUT_FILENO, sendDir, strlen(sendDir));
+
+    closedir(dirp);
+
+    return 0;
+}
 
 int main(int argc, char *argv[]){
 
@@ -97,127 +204,9 @@ int main(int argc, char *argv[]){
     //Set default path
     if (!path) strcpy(pathAd,".");
 
-    file = open("reg.txt", O_WRONLY);
+    file = open("reg.txt", O_WRONLY | O_APPEND);
     init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, pathAd);
     close(file);
 
     return 0;
 }
-
-int init(int all, int b, int B, int Bsize, int path, 
-            int L, int S, int mDepth, int maxDepth, char* pathAd){
-    /**USED FOR TESTING REASONS ONLY**/
-    //if (all) printf("Got all\n");
-    //if (b) printf("Got b\n");
-    //if (L) printf("Got -L\n");
-    //if (S) printf("Got -S\n");
-    //if (mDepth) printf("Got %d depth\n", maxDepth);
-    //if (B) printf("Got -B %d\n", Bsize);
-
-    DIR *dirp;
-    struct dirent *direntp;
-    struct stat stat_buf;
-    char directoryname[150] = { '\0' };
-    
-    int status;
-    pid_t pid = 0;
-    char fp[PATH_MAX];
-
-    // int pp[2];
-    // if (pipe(pp) == -1) printf("Pipe error %s\n", strerror(errno));
-    int dirSize = 0;
-
-    if ((dirp = opendir(pathAd)) == NULL)
-    {
-        perror(pathAd);
-        exit(2);
-    }
-
-    while ((direntp = readdir(dirp)) != NULL){
-        // int pp[2];
-        // if (pipe(pp) == -1) printf("Pipe error %s\n", strerror(errno));
-
-        snprintf(fp, sizeof(fp), "%s/%s", pathAd, direntp->d_name);
-
-        if (lstat(fp, &stat_buf)==-1){
-            perror("lstat ERROR");
-            exit(3);
-        }
-
-        if (S_ISREG(stat_buf.st_mode)) {
-            long num = stat_buf.st_size;
-            dirSize += num;
-
-            if (all && (!mDepth || maxDepth > 0)) {
-                if(b && !B){
-                    printf("%-8ld %s \n", num, fp);
-                }
-                else{
-                    round_up_4096(&num);
-                    num = num / Bsize;
-                    printf("%-8ld %s \n", num, fp);
-                }
-            }
-        }
-        
-        else if (S_ISDIR(stat_buf.st_mode) && (!mDepth || (maxDepth > 0))) {
-            int pp[2];
-            if (pipe(pp) == -1) printf("Pipe error %s\n", strerror(errno));
-
-            strcpy(directoryname, direntp->d_name);
-            if(check_point_folders(directoryname)){
-                pid = fork();
-
-                if (pid == 0 ){
-                    char* cmd[10];
-                    if (mDepth) maxDepth--;
-                    cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp, cmd);
-
-                    close(pp[READ]);
-                    if (dup2(pp[WRITE], STDOUT_FILENO) == -1) printf("Dup error %s\n", strerror(errno));
-                    execvp("./simpledu", cmd);
-                }
-
-                else if (pid > 0){
-                    wait(&status);
-
-                    close(pp[WRITE]);
-                    char content[MAX_INPUT];
-                    while (read(pp[READ], content, MAX_INPUT /*strlen(content) (??)*/)){
-                        printf("%s", content);
-                        //write(STDOUT_FILENO, content, strlen(content));
-                        write(file, content, /*sizeof(content)*/ strlen(content));
-                        if (!S){
-                            char* lines[MAX_INPUT]; line_divider(content, lines);
-                            add_initial_numbers(lines, &dirSize, pathAd, fp);
-                        }
-                        memset(content, 0, sizeof(content));
-                    }
-                    write(file, "\n", 1);
-                }
-            }
-            memset(directoryname, 0, sizeof(directoryname));
-        }
-    }
-
-    int pp[2];
-    if (pipe(pp) == -1) printf("Pipe error %s\n", strerror(errno));
-
-    if (b && !B){
-        //dirSize += stat_buf.st_size;
-        dirSize += 4096;
-        printf("%-8d %s \n", dirSize, pathAd);
-    }
-    else{
-        round_up_4096(&stat_buf.st_size);
-        stat_buf.st_size = stat_buf.st_size / Bsize;
-        dirSize += stat_buf.st_size;
-        printf("%-8d %s \n", dirSize, pathAd);
-    }
-
-    closedir(dirp);
-
-    return 0;
-}
-
-

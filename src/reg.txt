@@ -1,0 +1,34 @@
+4096     test/f1/f4 
+Adding 4096 to 0
+
+50       test/f1/f3/f7/kkkk.txt 
+0        test/f1/f3/f7/why.zip 
+4146     test/f1/f3/f7 
+Adding 4146 to 0
+
+82       test/f1/f3/f6/get.txt 
+4178     test/f1/f3/f6 
+Adding 4146 to 4146
+
+50       test/f1/f3/f7/kkkk.txt 
+0        test/f1/f3/f7/why.zip 
+4146     test/f1/f3/f7 
+82       test/f1/f3/f6/get.txt 
+4178     test/f1/f3/f6 
+12388    test/f1/f3 
+Adding 12388 to 4096
+
+4096     test/f1/f4 
+50       test/f1/f3/f7/kkkk.txt 
+0        test/f1/f3/f7/why.zip 
+4146     test/f1/f3/f7 
+82       test/f1/f3/f6/get.txt 
+4178     test/f1/f3/f6 
+12388    test/f1/f3 
+20580    test/f1 
+Adding 20580 to 17
+
+65       test/f2/p.txt 
+4161     test/f2 
+Adding 20580 to 20597
+
