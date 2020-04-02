@@ -24,6 +24,6 @@ _Bool is_number(char*a);
 
 int check_point_folders(char* directoryname);
 
-void line_divider(char content[], char** lines);
+int line_divider(char content[], char** lines, int file);
 
-void add_initial_numbers(char** lines, int* dirSize, char* to, char* from, int file);
+void add_initial_numbers(char** lines, int* dirSize, char* to, char* from, int file, int lineSize);

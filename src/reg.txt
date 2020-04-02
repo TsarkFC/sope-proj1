@@ -1,34 +1,68 @@
-4096     test/f1/f4 
-Adding 4096 to 0
+118      ../example/D2/F2.BIN 
+4214     ../example/D2 
+Last line: 4214     ../example/D2 
+Adding 4214 to ../example
 
-50       test/f1/f3/f7/kkkk.txt 
-0        test/f1/f3/f7/why.zip 
-4146     test/f1/f3/f7 
-Adding 4146 to 0
+158      ../example/D1/Da/F3.BIN 
+4254     ../example/D1/Da 
+Last line: 4254     ../example/D1/Da 
+Adding 4254 to ../example/D1
 
-82       test/f1/f3/f6/get.txt 
-4178     test/f1/f3/f6 
-Adding 4146 to 4146
+39       ../example/D1/Db/Dx/doc.pdf 
+62       ../example/D1/Db/Dx/output.log 
+4197     ../example/D1/Db/Dx 
+Last line: 4197     ../example/D1/Db/Dx 
+Adding 4197 to ../example/D1/Db
 
-50       test/f1/f3/f7/kkkk.txt 
-0        test/f1/f3/f7/why.zip 
-4146     test/f1/f3/f7 
-82       test/f1/f3/f6/get.txt 
-4178     test/f1/f3/f6 
-12388    test/f1/f3 
-Adding 12388 to 4096
+39       ../example/D1/Db/Dx/doc.pdf 
+62       ../example/D1/Db/Dx/output.log 
+4197     ../example/D1/Db/Dx 
+77       ../example/D1/Db/pkg.deb 
+99       ../example/D1/Db/arquive.zip 
+8469     ../example/D1/Db 
+Last line: 8469     ../example/D1/Db 
+Adding 8469 to ../example/D1
 
-4096     test/f1/f4 
-50       test/f1/f3/f7/kkkk.txt 
-0        test/f1/f3/f7/why.zip 
-4146     test/f1/f3/f7 
-82       test/f1/f3/f6/get.txt 
-4178     test/f1/f3/f6 
-12388    test/f1/f3 
-20580    test/f1 
-Adding 20580 to 17
+158      ../example/D1/Da/F3.BIN 
+4254     ../example/D1/Da 
+96       ../example/D1/src.c 
+39       ../example/D1/Db/Dx/doc.pdf 
+62       ../example/D1/Db/Dx/output.log 
+4197     ../example/D1/Db/Dx 
+77       ../example/D1/Db/pkg.deb 
+99       ../example/D1/Db/arquive.zip 
+8469     ../example/D1/Db 
+233      ../example/D1/dep.d 
+17148    ../example/D1 
+Last line: 17148    ../example/D1 
+Adding 17148 to ../example
 
-65       test/f2/p.txt 
-4161     test/f2 
-Adding 20580 to 20597
+118      ../example/D2/F2.BIN 
+4214     ../example/D2 
+
+158      ../example/D1/Da/F3.BIN 
+4254     ../example/D1/Da 
+
+39       ../example/D1/Db/Dx/doc.pdf 
+62       ../example/D1/Db/Dx/output.log 
+4197     ../example/D1/Db/Dx 
+
+39       ../example/D1/Db/Dx/doc.pdf 
+62       ../example/D1/Db/Dx/output.log 
+4197     ../example/D1/Db/Dx 
+77       ../example/D1/Db/pkg.deb 
+99       ../example/D1/Db/arquive.zip 
+4272     ../example/D1/Db 
+
+158      ../example/D1/Da/F3.BIN 
+4254     ../example/D1/Da 
+96       ../example/D1/src.c 
+39       ../example/D1/Db/Dx/doc.pdf 
+62       ../example/D1/Db/Dx/output.log 
+4197     ../example/D1/Db/Dx 
+77       ../example/D1/Db/pkg.deb 
+99       ../example/D1/Db/arquive.zip 
+4272     ../example/D1/Db 
+233      ../example/D1/dep.d 
+4425     ../example/D1 
 

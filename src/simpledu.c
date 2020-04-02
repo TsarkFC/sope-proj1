@@ -104,8 +104,9 @@ int init(int all, int b, int B, int Bsize, int path,
                         write(STDOUT_FILENO, content, strlen(content));
                         write(file, content, strlen(content));
                         if (!S){
-                            char* lines[MAX_INPUT]; line_divider(content, lines);
-                            add_initial_numbers(lines, &dirSize, pathAd, fp, file);
+                            char* lines[MAX_INPUT];
+                            int n = line_divider(content, lines, file);
+                            add_initial_numbers(lines, &dirSize, pathAd, fp, file, n);
                         }
                         memset(content, 0, sizeof(content));
                     }

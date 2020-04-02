@@ -82,7 +82,7 @@ int check_point_folders(char* directoryname){
     return 0;
 }
 
-void line_divider(char content[], char** lines){
+int line_divider(char content[], char** lines, int file){
     char* line;
     line = strtok(content, "\n");
     int i = 0;
@@ -92,19 +92,21 @@ void line_divider(char content[], char** lines){
         i++;
         line = strtok(NULL, "\n");
     }
+    write(file, "Last line: ", strlen("Last line: "));
+    write(file, lines[i-1], strlen(lines[i-1]));
+    write(file, "\n", 1);
+
+    return i;
 }
 
-void add_initial_numbers(char** lines, int* dirSize, char* to, char* from, int file){
+void add_initial_numbers(char** lines, int* dirSize, char* to, char* from, int file, int lineSize){
     int i = 0;
     char* num;
 
-    while (lines[i] != NULL){
-        num = strtok(lines[i], " ");
-        i++;
-    }
+    num = strtok(lines[lineSize-1], " ");
 
     char a[50];
-    sprintf(a, "Adding %s to %d\n", num, *dirSize);
+    sprintf(a, "Adding %s to %s\n", num, to);
     write(file, a, strlen(a));
     *dirSize += atoi(num);
 }
