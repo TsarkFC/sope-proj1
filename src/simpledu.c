@@ -68,11 +68,12 @@ int init(int all, int b, int B, int Bsize, int path,
             long num = stat_buf.st_size;
             char sendFile[50];
 
-            if (all && (!mDepth || maxDepth > 0)) {
-                if(!(b && !B)){
+            if(!(b && !B)){
                     round_up_4096(&num);
                     num = num / Bsize;
                 }
+
+            if (all && (!mDepth || maxDepth > 0)) {
                 sprintf(sendFile, "%-8ld %s \n", num, fp);
                 write(STDOUT_FILENO, sendFile, strlen(sendFile));
             }
@@ -122,10 +123,12 @@ int init(int all, int b, int B, int Bsize, int path,
         dirSize += 4096;
     }
     else{
-        round_up_4096(&stat_buf.st_size);
-        stat_buf.st_size = stat_buf.st_size / Bsize;
-        dirSize += stat_buf.st_size;
+        long tempSize = stat_buf.st_size;
+        round_up_4096(&tempSize);
+        tempSize = tempSize / Bsize;
+        dirSize += tempSize;
     }
+
     char sendDir[50];
     sprintf(sendDir,"%-8d %s \n", dirSize, pathAd);
     write(STDOUT_FILENO, sendDir, strlen(sendDir));

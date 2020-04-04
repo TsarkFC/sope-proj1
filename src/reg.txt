@@ -1,68 +1,165 @@
-118      ../example/D2/F2.BIN 
-4214     ../example/D2 
-Last line: 4214     ../example/D2 
-Adding 4214 to ../example
+4        ../example/D2/F2.BIN 
+8        ../example/D2 
+Last line: 8        ../example/D2 
+Adding 8 to ../example
 
-158      ../example/D1/Da/F3.BIN 
-4254     ../example/D1/Da 
-Last line: 4254     ../example/D1/Da 
-Adding 4254 to ../example/D1
+4        ../example/D1/Da/F3.BIN 
+8        ../example/D1/Da 
+Last line: 8        ../example/D1/Da 
+Adding 8 to ../example/D1
 
-39       ../example/D1/Db/Dx/doc.pdf 
-62       ../example/D1/Db/Dx/output.log 
-4197     ../example/D1/Db/Dx 
-Last line: 4197     ../example/D1/Db/Dx 
-Adding 4197 to ../example/D1/Db
+4        ../example/D1/Db/Dx/doc.pdf 
+4        ../example/D1/Db/Dx/output.log 
+12       ../example/D1/Db/Dx 
+Last line: 12       ../example/D1/Db/Dx 
+Adding 12 to ../example/D1/Db
 
-39       ../example/D1/Db/Dx/doc.pdf 
-62       ../example/D1/Db/Dx/output.log 
-4197     ../example/D1/Db/Dx 
-77       ../example/D1/Db/pkg.deb 
-99       ../example/D1/Db/arquive.zip 
-8469     ../example/D1/Db 
-Last line: 8469     ../example/D1/Db 
-Adding 8469 to ../example/D1
+4        ../example/D1/Db/Dx/doc.pdf 
+4        ../example/D1/Db/Dx/output.log 
+12       ../example/D1/Db/Dx 
+4        ../example/D1/Db/pkg.deb 
+4        ../example/D1/Db/arquive.zip 
+24       ../example/D1/Db 
+Last line: 24       ../example/D1/Db 
+Adding 24 to ../example/D1
 
-158      ../example/D1/Da/F3.BIN 
-4254     ../example/D1/Da 
-96       ../example/D1/src.c 
-39       ../example/D1/Db/Dx/doc.pdf 
-62       ../example/D1/Db/Dx/output.log 
-4197     ../example/D1/Db/Dx 
-77       ../example/D1/Db/pkg.deb 
-99       ../example/D1/Db/arquive.zip 
-8469     ../example/D1/Db 
-233      ../example/D1/dep.d 
-17148    ../example/D1 
-Last line: 17148    ../example/D1 
-Adding 17148 to ../example
+4        ../example/D1/Da/F3.BIN 
+8        ../example/D1/Da 
+4        ../example/D1/src.c 
+4        ../example/D1/Db/Dx/doc.pdf 
+4        ../example/D1/Db/Dx/output.log 
+12       ../example/D1/Db/Dx 
+4        ../example/D1/Db/pkg.deb 
+4        ../example/D1/Db/arquive.zip 
+24       ../example/D1/Db 
+4        ../example/D1/dep.d 
+44       ../example/D1 
+Last line: 44       ../example/D1 
+Adding 44 to ../example
 
-118      ../example/D2/F2.BIN 
-4214     ../example/D2 
+122      ../example/D2 
+Last line: 122      ../example/D2 
+Adding 122 to ../example
 
-158      ../example/D1/Da/F3.BIN 
-4254     ../example/D1/Da 
+162      ../example/D1/Da 
+Last line: 162      ../example/D1/Da 
+Adding 162 to ../example/D1
 
-39       ../example/D1/Db/Dx/doc.pdf 
-62       ../example/D1/Db/Dx/output.log 
-4197     ../example/D1/Db/Dx 
+105      ../example/D1/Db/Dx 
+Last line: 105      ../example/D1/Db/Dx 
+Adding 105 to ../example/D1/Db
 
-39       ../example/D1/Db/Dx/doc.pdf 
-62       ../example/D1/Db/Dx/output.log 
-4197     ../example/D1/Db/Dx 
-77       ../example/D1/Db/pkg.deb 
-99       ../example/D1/Db/arquive.zip 
-4272     ../example/D1/Db 
+105      ../example/D1/Db/Dx 
+285      ../example/D1/Db 
+Last line: 285      ../example/D1/Db 
+Adding 285 to ../example/D1
 
-158      ../example/D1/Da/F3.BIN 
-4254     ../example/D1/Da 
-96       ../example/D1/src.c 
-39       ../example/D1/Db/Dx/doc.pdf 
-62       ../example/D1/Db/Dx/output.log 
-4197     ../example/D1/Db/Dx 
-77       ../example/D1/Db/pkg.deb 
-99       ../example/D1/Db/arquive.zip 
-4272     ../example/D1/Db 
-233      ../example/D1/dep.d 
-4425     ../example/D1 
+162      ../example/D1/Da 
+105      ../example/D1/Db/Dx 
+285      ../example/D1/Db 
+780      ../example/D1 
+Last line: 780      ../example/D1 
+Adding 780 to ../example
+
+4        ../example/D2/F2.BIN 
+8        ../example/D2 
+Last line: 8        ../example/D2 
+Adding 8 to ../example
+
+4        ../example/D1/Da/F3.BIN 
+8        ../example/D1/Da 
+Last line: 8        ../example/D1/Da 
+Adding 8 to ../example/D1
+
+4        ../example/D1/Db/Dx/doc.pdf 
+4        ../example/D1/Db/Dx/output.log 
+12       ../example/D1/Db/Dx 
+Last line: 12       ../example/D1/Db/Dx 
+Adding 12 to ../example/D1/Db
+
+4        ../example/D1/Db/Dx/doc.pdf 
+4        ../example/D1/Db/Dx/output.log 
+12       ../example/D1/Db/Dx 
+4        ../example/D1/Db/pkg.deb 
+4        ../example/D1/Db/arquive.zip 
+24       ../example/D1/Db 
+Last line: 24       ../example/D1/Db 
+Adding 24 to ../example/D1
+
+4        ../example/D1/Da/F3.BIN 
+8        ../example/D1/Da 
+4        ../example/D1/src.c 
+4        ../example/D1/Db/Dx/doc.pdf 
+4        ../example/D1/Db/Dx/output.log 
+12       ../example/D1/Db/Dx 
+4        ../example/D1/Db/pkg.deb 
+4        ../example/D1/Db/arquive.zip 
+24       ../example/D1/Db 
+4        ../example/D1/dep.d 
+44       ../example/D1 
+Last line: 44       ../example/D1 
+Adding 44 to ../example
+
+4        ../example/D2/F2.BIN 
+8        ../example/D2 
+Last line: 8        ../example/D2 
+Adding 8 to ../example
+
+4        ../example/D1/Da/F3.BIN 
+8        ../example/D1/Da 
+Last line: 8        ../example/D1/Da 
+Adding 8 to ../example/D1
+
+4        ../example/D1/Db/Dx/doc.pdf 
+4        ../example/D1/Db/Dx/output.log 
+12       ../example/D1/Db/Dx 
+Last line: 12       ../example/D1/Db/Dx 
+Adding 12 to ../example/D1/Db
+
+4        ../example/D1/Db/Dx/doc.pdf 
+4        ../example/D1/Db/Dx/output.log 
+12       ../example/D1/Db/Dx 
+4        ../example/D1/Db/pkg.deb 
+4        ../example/D1/Db/arquive.zip 
+24       ../example/D1/Db 
+Last line: 24       ../example/D1/Db 
+Adding 24 to ../example/D1
+
+4        ../example/D1/Da/F3.BIN 
+8        ../example/D1/Da 
+4        ../example/D1/src.c 
+4        ../example/D1/Db/Dx/doc.pdf 
+4        ../example/D1/Db/Dx/output.log 
+12       ../example/D1/Db/Dx 
+4        ../example/D1/Db/pkg.deb 
+4        ../example/D1/Db/arquive.zip 
+24       ../example/D1/Db 
+4        ../example/D1/dep.d 
+44       ../example/D1 
+Last line: 44       ../example/D1 
+Adding 44 to ../example
+
+8        ../example/D2 
+Last line: 8        ../example/D2 
+Adding 8 to ../example
+
+8        ../example/D1/Da 
+Last line: 8        ../example/D1/Da 
+Adding 8 to ../example/D1
+
+12       ../example/D1/Db/Dx 
+Last line: 12       ../example/D1/Db/Dx 
+Adding 12 to ../example/D1/Db
+
+12       ../example/D1/Db/Dx 
+24       ../example/D1/Db 
+Last line: 24       ../example/D1/Db 
+Adding 24 to ../example/D1
+
+8        ../example/D1/Da 
+12       ../example/D1/Db/Dx 
+24       ../example/D1/Db 
+44       ../example/D1 
+Last line: 44       ../example/D1 
+Adding 44 to ../example
 
