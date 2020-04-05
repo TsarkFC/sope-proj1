@@ -73,11 +73,9 @@ int init(int all, int b, int B, int Bsize, int path,
             long num = stat_buf.st_size;
             char sendFile[50];
 
-            //dirSize += num;
-
             if(!(b && !B)){
                 round_up_4096(&num);
-                num = (num) / (float)Bsize + 0.5;
+                num = (num + Bsize - 1) / Bsize;
             }
 
             if (all && (!mDepth || maxDepth > 0)) {
@@ -88,7 +86,7 @@ int init(int all, int b, int B, int Bsize, int path,
             
         }
         
-        else if (S_ISDIR(stat_buf.st_mode) /*&& ((!mDepth || (maxDepth > 0)))*/) {
+        else if (S_ISDIR(stat_buf.st_mode)) {
 
             strcpy(directoryname, direntp->d_name);
             if(check_point_folders(directoryname)){
@@ -100,7 +98,6 @@ int init(int all, int b, int B, int Bsize, int path,
 
                     close(pp[READ]);
                     if (dup2(pp[WRITE], STDOUT_FILENO) == -1) printf("Dup error %s\n", strerror(errno));
-                    write(file, "\n", 1);
                     execvp("./simpledu", cmd);
                 }
 
@@ -110,18 +107,34 @@ int init(int all, int b, int B, int Bsize, int path,
                     close(pp[WRITE]);
                     char content[PATH_MAX];
                     while (read(pp[READ], content, PATH_MAX)){
-                        if ((!mDepth || (maxDepth > 0))) write(STDOUT_FILENO, content, strlen(content));
+                        if ((!mDepth || (maxDepth > 0))) {
+                            write(STDOUT_FILENO, content, strlen(content));
+                        }
+
                         write(file, content, strlen(content));
                         if (!S){
                             char* lines[MAX_INPUT];
                             int n = line_divider(content, lines, file);
                             add_initial_numbers(lines, &dirSize, pathAd, fp, file, n);
                         }
+                        
                         memset(content, 0, sizeof(content));
                     }
                 }
             }
             memset(directoryname, 0, sizeof(directoryname));
+        }
+        
+        else{
+            long num = stat_buf.st_size;
+            char sendFile[50];
+
+            if (all && (!mDepth || maxDepth > 0)) {
+                sprintf(sendFile, "%-8ld %s \n", num, fp);
+                write(STDOUT_FILENO, sendFile, strlen(sendFile));
+            }
+
+            dirSize += num;
         }
     }
 
@@ -134,6 +147,8 @@ int init(int all, int b, int B, int Bsize, int path,
         tempSize = ((tempSize) /Bsize);
         dirSize += tempSize;
     }
+
+    //if (B) dirSize = (dirSize + Bsize - 1) / Bsize;
 
     char sendDir[50];
     sprintf(sendDir,"%-8d %s \n", dirSize, pathAd);

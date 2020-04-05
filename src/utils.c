@@ -65,6 +65,7 @@ void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int m
         cmd[i] = max;
         i++;
     }
+    //printCMD(cmd, file);
 }
 
 void round_up_4096(long * num){
@@ -103,9 +104,9 @@ int line_divider(char content[], char** lines, int file){
         i++;
         line = strtok(NULL, "\n");
     }
-    // write(file, "Last line: ", strlen("Last line: "));
-    // write(file, lines[i-1], strlen(lines[i-1]));
-    // write(file, "\n", 1);
+    write(file, "Last line: ", strlen("Last line: "));
+    write(file, lines[i-1], strlen(lines[i-1]));
+    write(file, "\n", 1);
 
     return i;
 }
