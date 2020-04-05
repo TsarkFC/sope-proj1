@@ -1,165 +1,354 @@
-4        ../example/D2/F2.BIN 
-8        ../example/D2 
-Last line: 8        ../example/D2 
-Adding 8 to ../example
 
-4        ../example/D1/Da/F3.BIN 
-8        ../example/D1/Da 
-Last line: 8        ../example/D1/Da 
-Adding 8 to ../example/D1
 
-4        ../example/D1/Db/Dx/doc.pdf 
-4        ../example/D1/Db/Dx/output.log 
-12       ../example/D1/Db/Dx 
-Last line: 12       ../example/D1/Db/Dx 
-Adding 12 to ../example/D1/Db
+4214     ../example/D2 
+Adding 4214 to ../example
 
-4        ../example/D1/Db/Dx/doc.pdf 
-4        ../example/D1/Db/Dx/output.log 
-12       ../example/D1/Db/Dx 
-4        ../example/D1/Db/pkg.deb 
-4        ../example/D1/Db/arquive.zip 
-24       ../example/D1/Db 
-Last line: 24       ../example/D1/Db 
-Adding 24 to ../example/D1
 
-4        ../example/D1/Da/F3.BIN 
-8        ../example/D1/Da 
-4        ../example/D1/src.c 
-4        ../example/D1/Db/Dx/doc.pdf 
-4        ../example/D1/Db/Dx/output.log 
-12       ../example/D1/Db/Dx 
-4        ../example/D1/Db/pkg.deb 
-4        ../example/D1/Db/arquive.zip 
-24       ../example/D1/Db 
-4        ../example/D1/dep.d 
-44       ../example/D1 
-Last line: 44       ../example/D1 
-Adding 44 to ../example
+4254     ../example/D1/Da 
+Adding 4254 to ../example/D1
 
-122      ../example/D2 
-Last line: 122      ../example/D2 
-Adding 122 to ../example
 
-162      ../example/D1/Da 
-Last line: 162      ../example/D1/Da 
-Adding 162 to ../example/D1
+4197     ../example/D1/Db/Dx 
+Adding 4197 to ../example/D1/Db
+8469     ../example/D1/Db 
+Adding 8469 to ../example/D1
+17148    ../example/D1 
+Adding 17148 to ../example
+4214     ../example/D2 
+17148    ../example/D1 
+25751    ../example 
+Adding 25751 to ..
 
-105      ../example/D1/Db/Dx 
-Last line: 105      ../example/D1/Db/Dx 
-Adding 105 to ../example/D1/Db
 
-105      ../example/D1/Db/Dx 
-285      ../example/D1/Db 
-Last line: 285      ../example/D1/Db 
-Adding 285 to ../example/D1
 
-162      ../example/D1/Da 
-105      ../example/D1/Db/Dx 
-285      ../example/D1/Db 
-780      ../example/D1 
-Last line: 780      ../example/D1 
-Adding 780 to ../example
 
-4        ../example/D2/F2.BIN 
-8        ../example/D2 
-Last line: 8        ../example/D2 
-Adding 8 to ../example
+4096     ../src/test/f1/f4 
+Adding 4096 to ../src/test/f1
 
-4        ../example/D1/Da/F3.BIN 
-8        ../example/D1/Da 
-Last line: 8        ../example/D1/Da 
-Adding 8 to ../example/D1
 
-4        ../example/D1/Db/Dx/doc.pdf 
-4        ../example/D1/Db/Dx/output.log 
-12       ../example/D1/Db/Dx 
-Last line: 12       ../example/D1/Db/Dx 
-Adding 12 to ../example/D1/Db
+4146     ../src/test/f1/f3/f7 
+Adding 4146 to ../src/test/f1/f3
 
-4        ../example/D1/Db/Dx/doc.pdf 
-4        ../example/D1/Db/Dx/output.log 
-12       ../example/D1/Db/Dx 
-4        ../example/D1/Db/pkg.deb 
-4        ../example/D1/Db/arquive.zip 
-24       ../example/D1/Db 
-Last line: 24       ../example/D1/Db 
-Adding 24 to ../example/D1
+4178     ../src/test/f1/f3/f6 
+Adding 4178 to ../src/test/f1/f3
+12420    ../src/test/f1/f3 
+Adding 12420 to ../src/test/f1
+20612    ../src/test/f1 
+Adding 20612 to ../src/test
 
-4        ../example/D1/Da/F3.BIN 
-8        ../example/D1/Da 
-4        ../example/D1/src.c 
-4        ../example/D1/Db/Dx/doc.pdf 
-4        ../example/D1/Db/Dx/output.log 
-12       ../example/D1/Db/Dx 
-4        ../example/D1/Db/pkg.deb 
-4        ../example/D1/Db/arquive.zip 
-24       ../example/D1/Db 
-4        ../example/D1/dep.d 
-44       ../example/D1 
-Last line: 44       ../example/D1 
-Adding 44 to ../example
+4161     ../src/test/f2 
+Adding 4161 to ../src/test
+28886    ../src/test 
+Adding 28886 to ../src
+28886    ../src/test 
+61841    ../src 
+Adding 61841 to ..
 
-4        ../example/D2/F2.BIN 
-8        ../example/D2 
-Last line: 8        ../example/D2 
-Adding 8 to ../example
 
-4        ../example/D1/Da/F3.BIN 
-8        ../example/D1/Da 
-Last line: 8        ../example/D1/Da 
-Adding 8 to ../example/D1
+22944    ../.git/hooks 
+Adding 22944 to ../.git
 
-4        ../example/D1/Db/Dx/doc.pdf 
-4        ../example/D1/Db/Dx/output.log 
-12       ../example/D1/Db/Dx 
-Last line: 12       ../example/D1/Db/Dx 
-Adding 12 to ../example/D1/Db
 
-4        ../example/D1/Db/Dx/doc.pdf 
-4        ../example/D1/Db/Dx/output.log 
-12       ../example/D1/Db/Dx 
-4        ../example/D1/Db/pkg.deb 
-4        ../example/D1/Db/arquive.zip 
-24       ../example/D1/Db 
-Last line: 24       ../example/D1/Db 
-Adding 24 to ../example/D1
 
-4        ../example/D1/Da/F3.BIN 
-8        ../example/D1/Da 
-4        ../example/D1/src.c 
-4        ../example/D1/Db/Dx/doc.pdf 
-4        ../example/D1/Db/Dx/output.log 
-12       ../example/D1/Db/Dx 
-4        ../example/D1/Db/pkg.deb 
-4        ../example/D1/Db/arquive.zip 
-24       ../example/D1/Db 
-4        ../example/D1/dep.d 
-44       ../example/D1 
-Last line: 44       ../example/D1 
-Adding 44 to ../example
 
-8        ../example/D2 
-Last line: 8        ../example/D2 
-Adding 8 to ../example
+4730     ../.git/logs/refs/remotes/origin 
+Adding 4730 to ../.git/logs/refs/remotes
+8826     ../.git/logs/refs/remotes 
+Adding 8826 to ../.git/logs/refs
 
-8        ../example/D1/Da 
-Last line: 8        ../example/D1/Da 
-Adding 8 to ../example/D1
+4816     ../.git/logs/refs/heads 
+Adding 4816 to ../.git/logs/refs
+17738    ../.git/logs/refs 
+Adding 17738 to ../.git/logs
+22554    ../.git/logs 
+Adding 22554 to ../.git
 
-12       ../example/D1/Db/Dx 
-Last line: 12       ../example/D1/Db/Dx 
-Adding 12 to ../example/D1/Db
+4096     ../.git/branches 
+Adding 4096 to ../.git
 
-12       ../example/D1/Db/Dx 
-24       ../example/D1/Db 
-Last line: 24       ../example/D1/Db 
-Adding 24 to ../example/D1
 
-8        ../example/D1/Da 
-12       ../example/D1/Db/Dx 
-24       ../example/D1/Db 
-44       ../example/D1 
-Last line: 44       ../example/D1 
-Adding 44 to ../example
+4096     ../.git/refs/tags 
+Adding 4096 to ../.git/refs
 
+
+4169     ../.git/refs/remotes/origin 
+Adding 4169 to ../.git/refs/remotes
+8265     ../.git/refs/remotes 
+Adding 8265 to ../.git/refs
+
+4137     ../.git/refs/heads 
+Adding 4137 to ../.git/refs
+20594    ../.git/refs 
+Adding 20594 to ../.git
+
+
+4212     ../.git/objects/57 
+Adding 4212 to ../.git/objects
+
+4284     ../.git/objects/4e 
+Adding 4284 to ../.git/objects
+
+10285    ../.git/objects/c3 
+Adding 10285 to ../.git/objects
+
+47087    ../.git/objects/pack 
+Adding 47087 to ../.git/objects
+
+10369    ../.git/objects/4c 
+Adding 10369 to ../.git/objects
+
+4413     ../.git/objects/2f 
+Adding 4413 to ../.git/objects
+
+4268     ../.git/objects/77 
+Adding 4268 to ../.git/objects
+
+5044     ../.git/objects/8b 
+Adding 5044 to ../.git/objects
+
+6519     ../.git/objects/cd 
+Adding 6519 to ../.git/objects
+
+6505     ../.git/objects/ee 
+Adding 6505 to ../.git/objects
+
+4270     ../.git/objects/53 
+Adding 4270 to ../.git/objects
+
+4471     ../.git/objects/50 
+Adding 4471 to ../.git/objects
+
+4267     ../.git/objects/e3 
+Adding 4267 to ../.git/objects
+
+4212     ../.git/objects/f1 
+Adding 4212 to ../.git/objects
+
+10362    ../.git/objects/4b 
+Adding 10362 to ../.git/objects
+
+5012     ../.git/objects/e5 
+Adding 5012 to ../.git/objects
+
+6496     ../.git/objects/9d 
+Adding 6496 to ../.git/objects
+
+4280     ../.git/objects/52 
+Adding 4280 to ../.git/objects
+
+4267     ../.git/objects/62 
+Adding 4267 to ../.git/objects
+
+4284     ../.git/objects/ad 
+Adding 4284 to ../.git/objects
+
+4212     ../.git/objects/ba 
+Adding 4212 to ../.git/objects
+
+4560     ../.git/objects/b4 
+Adding 4560 to ../.git/objects
+
+4463     ../.git/objects/28 
+Adding 4463 to ../.git/objects
+
+4096     ../.git/objects/info 
+Adding 4096 to ../.git/objects
+176334   ../.git/objects 
+Adding 176334 to ../.git
+
+4336     ../.git/info 
+Adding 4336 to ../.git
+22944    ../.git/hooks 
+22554    ../.git/logs 
+4096     ../.git/branches 
+20594    ../.git/refs 
+176334   ../.git/objects 
+4336     ../.git/info 
+256977   ../.git 
+Adding 256977 to ..
+
+
+4214     ../example/D2 
+Adding 4214 to ../example
+
+
+4254     ../example/D1/Da 
+Adding 4254 to ../example/D1
+
+
+4197     ../example/D1/Db/Dx 
+Adding 4197 to ../example/D1/Db
+8469     ../example/D1/Db 
+Adding 8469 to ../example/D1
+17148    ../example/D1 
+t 
+Adding t to ../example
+4214     ../example/D2 
+293      ../example/f.txt 
+17148    ../example/D1 
+t 
+8603     ../example 
+Adding 8603 to ..
+
+
+
+
+4096     ../src/test/f1/f4 
+Adding 4096 to ../src/test/f1
+
+
+4146     ../src/test/f1/f3/f7 
+Adding 4146 to ../src/test/f1/f3
+
+4178     ../src/test/f1/f3/f6 
+Adding 4178 to ../src/test/f1/f3
+12420    ../src/test/f1/f3 
+Adding 12420 to ../src/test/f1
+20612    ../src/test/f1 
+Adding 20612 to ../src/test
+
+4161     ../src/test/f2 
+Adding 4161 to ../src/test
+28886    ../src/test 
+Adding 28886 to ../src
+28886    ../src/test 
+2643     ../src/utils.c 
+4113     ../src/reg.txt 
+763      ../src/utils.h 
+18104    ../src/simpledu 
+6577     ../src/simpledu.c 
+65182    ../src 
+Adding 65182 to ..
+
+
+22944    ../.git/hooks 
+refs 
+Adding refs to ../.git
+
+
+
+
+4730     ../.git/logs/refs/remotes/origin 
+Adding 4730 to ../.git/logs/refs/remotes
+8826     ../.git/logs/refs/remotes 
+Adding 8826 to ../.git/logs/refs
+
+4816     ../.git/logs/refs/heads 
+Adding 4816 to ../.git/logs/refs
+17738    ../.git/logs/refs 
+Adding 17738 to ../.git/logs
+22554    ../.git/logs 
+Adding 22554 to ../.git
+
+4096     ../.git/branches 
+Adding 4096 to ../.git
+
+
+4096     ../.git/refs/tags 
+Adding 4096 to ../.git/refs
+
+
+4169     ../.git/refs/remotes/origin 
+Adding 4169 to ../.git/refs/remotes
+8265     ../.git/refs/remotes 
+Adding 8265 to ../.git/refs
+
+4137     ../.git/refs/heads 
+Adding 4137 to ../.git/refs
+20594    ../.git/refs 
+Adding 20594 to ../.git
+
+
+4212     ../.git/objects/57 
+Adding 4212 to ../.git/objects
+
+4284     ../.git/objects/4e 
+Adding 4284 to ../.git/objects
+
+10285    ../.git/objects/c3 
+Adding 10285 to ../.git/objects
+
+47087    ../.git/objects/pack 
+Adding 47087 to ../.git/objects
+
+10369    ../.git/objects/4c 
+Adding 10369 to ../.git/objects
+
+4413     ../.git/objects/2f 
+Adding 4413 to ../.git/objects
+
+4268     ../.git/objects/77 
+Adding 4268 to ../.git/objects
+
+5044     ../.git/objects/8b 
+Adding 5044 to ../.git/objects
+
+6519     ../.git/objects/cd 
+Adding 6519 to ../.git/objects
+
+6505     ../.git/objects/ee 
+Adding 6505 to ../.git/objects
+
+4270     ../.git/objects/53 
+Adding 4270 to ../.git/objects
+
+4471     ../.git/objects/50 
+Adding 4471 to ../.git/objects
+
+4267     ../.git/objects/e3 
+Adding 4267 to ../.git/objects
+
+4212     ../.git/objects/f1 
+Adding 4212 to ../.git/objects
+
+10362    ../.git/objects/4b 
+Adding 10362 to ../.git/objects
+
+5012     ../.git/objects/e5 
+Adding 5012 to ../.git/objects
+
+6496     ../.git/objects/9d 
+Adding 6496 to ../.git/objects
+
+4280     ../.git/objects/52 
+Adding 4280 to ../.git/objects
+
+4267     ../.git/objects/62 
+Adding 4267 to ../.git/objects
+
+4284     ../.git/objects/ad 
+Adding 4284 to ../.git/objects
+
+4212     ../.git/objects/ba 
+Adding 4212 to ../.git/objects
+
+4560     ../.git/objects/b4 
+Adding 4560 to ../.git/objects
+
+4463     ../.git/objects/28 
+Adding 4463 to ../.git/objects
+
+4096     ../.git/objects/info 
+Adding 4096 to ../.git/objects
+176334   ../.git/objects 
+on 
+Adding on to ../.git
+
+4336     ../.git/info 
+Adding 4336 to ../.git
+1509     ../.git/index 
+114      ../.git/packed-refs 
+22944    ../.git/hooks 
+refs 
+39       ../.git/COMMIT_EDITMSG 
+23       ../.git/HEAD 
+22554    ../.git/logs 
+4096     ../.git/branches 
+20594    ../.git/refs 
+73       ../.git/description 
+265      ../.git/config 
+176334   ../.git/objects 
+on 
+4336     ../.git/info 
+57699    ../.git 
+Adding 57699 to ..

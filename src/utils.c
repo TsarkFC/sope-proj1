@@ -12,7 +12,18 @@ void int_to_char(int no, char* ch){
     sprintf(ch, "%d", no);
 }
 
-void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, int maxDepth, char* pathAd, char** cmd){
+void printCMD(char** cmd, int file){
+    int j = 0;
+    write(file, "Printing command...\n", strlen("Printing command...\n"));
+    while (cmd[j] != 0){
+        write(file, cmd[j], strlen(cmd[j]));
+        write(file, "  ", strlen("  "));
+        j++;
+    }
+    write(file, "\n", 1);
+}
+
+void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, int maxDepth, char* pathAd, char** cmd, int file){
     cmd[0] = "./simpledu";
     cmd[1] = "-l";
     
@@ -67,7 +78,7 @@ _Bool is_number(char*a){
         return 0;
     }
     for(int i = 0; i < strlen(a); i++){
-        if(!(a[i] > 57 && a[i] < 48)){
+        if((a[i] > 57 || a[i] < 48)){
             return 0;
         }
     }
@@ -92,15 +103,14 @@ int line_divider(char content[], char** lines, int file){
         i++;
         line = strtok(NULL, "\n");
     }
-    write(file, "Last line: ", strlen("Last line: "));
-    write(file, lines[i-1], strlen(lines[i-1]));
-    write(file, "\n", 1);
+    // write(file, "Last line: ", strlen("Last line: "));
+    // write(file, lines[i-1], strlen(lines[i-1]));
+    // write(file, "\n", 1);
 
     return i;
 }
 
 void add_initial_numbers(char** lines, int* dirSize, char* to, char* from, int file, int lineSize){
-    int i = 0;
     char* num;
 
     num = strtok(lines[lineSize-1], " ");

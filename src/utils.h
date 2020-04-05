@@ -16,7 +16,7 @@
 
 void slice_str(const char * str, char * buffer, size_t start, size_t end);
 
-void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, int maxDepth, char* pathAd, char** cmd);
+void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, int maxDepth, char* pathAd, char** cmd, int file);
 
 void round_up_4096(long * num);
 
