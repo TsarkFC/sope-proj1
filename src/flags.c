@@ -20,7 +20,7 @@ extern int file;
 
 void handleB_output(char** lines, int linesSize, int Bsize){
     //write() --> STDOUT     ROUNDING --> num = (num + Bsize - 1) / Bsize;
-    char* copy; char safe[50];
+    char* copy;
     char* number; 
     char* path;
 

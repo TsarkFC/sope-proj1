@@ -39,14 +39,6 @@ void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int m
         cmd[i] = "-b";
         i++;
     }
-    if (B) {
-        char str[100] = "";
-        cmd[i] = "-B";
-        i++;
-        int_to_char(Bsize, str);
-        cmd[i] = str;
-        i++;
-    }
     if (path) {
         cmd[i] = pathAd;
         i++;
@@ -67,7 +59,15 @@ void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int m
         cmd[i] = max;
         i++;
     }
-    //printCMD(cmd, file);
+    if (B) {
+        char str[100] = "";
+        cmd[i] = "-B";
+        i++;
+        int_to_char(Bsize, str);
+        cmd[i] = str;
+        i++;
+    }
+    printCMD(cmd, file);
 }
 
 void round_up_4096(long * num){
@@ -124,7 +124,6 @@ void add_initial_numbers(char** lines, int* dirSize, char* to, char* from, int f
 
     num = strtok(copy, " ");
 
-    char a[50];
     *dirSize += atoi(num);
 
     free(copy);
@@ -135,3 +134,4 @@ void freeLines(char** lines, int linesSize){
         memset(lines[i], 0, strlen(lines[i]));
     }
 }
+
