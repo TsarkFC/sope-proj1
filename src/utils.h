@@ -20,6 +20,8 @@ void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int m
 
 void round_up_4096(long * num);
 
+void int_to_char(int no, char* ch);
+
 _Bool is_number(char*a);
 
 int check_point_folders(char* directoryname);
@@ -27,3 +29,5 @@ int check_point_folders(char* directoryname);
 int line_divider(char content[], char** lines, int file);
 
 void add_initial_numbers(char** lines, int* dirSize, char* to, char* from, int file, int lineSize);
+
+void freeLines(char** lines, int linesSize);

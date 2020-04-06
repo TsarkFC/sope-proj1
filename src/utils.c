@@ -1,5 +1,7 @@
 #include "utils.h"
 
+extern int file;
+
 void slice_str(const char * str, char * buffer, size_t start, size_t end){
     size_t j = 0;
     for ( size_t i = start; i <= end; ++i ) {
@@ -69,9 +71,15 @@ void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int m
 }
 
 void round_up_4096(long * num){
-    if(*num % 4096 != 0){
-        *num = (*num / 4096) * 4096 + 4096;
+    char test1[50];
+    int_to_char(*num, test1);
+
+    if (*num == 0) return;
+    int no = 0;
+    while(*num > no){
+        no += 4096;
     }
+    *num = no;
 }
 
 _Bool is_number(char*a){
@@ -104,20 +112,26 @@ int line_divider(char content[], char** lines, int file){
         i++;
         line = strtok(NULL, "\n");
     }
-    write(file, "Last line: ", strlen("Last line: "));
-    write(file, lines[i-1], strlen(lines[i-1]));
-    write(file, "\n", 1);
 
     return i;
 }
 
 void add_initial_numbers(char** lines, int* dirSize, char* to, char* from, int file, int lineSize){
     char* num;
+    char* copy;
+    copy = malloc(strlen(lines[lineSize-1]));
+    strcpy(copy, lines[lineSize-1]);
 
-    num = strtok(lines[lineSize-1], " ");
+    num = strtok(copy, " ");
 
     char a[50];
-    sprintf(a, "Adding %s to %s\n", num, to);
-    write(file, a, strlen(a));
     *dirSize += atoi(num);
+
+    free(copy);
+}
+
+void freeLines(char** lines, int linesSize){
+    for (int i = 0; i < linesSize; i++){
+        memset(lines[i], 0, strlen(lines[i]));
+    }
 }
