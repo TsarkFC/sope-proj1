@@ -52,21 +52,21 @@ void handleB_output(char** lines, int linesSize, int Bsize){
     }
 }
 
-void handleL_output(char** lines, int linesSize, char* rootPath, char* newPath){
-    //write() --> STDOUT   
-    char* copy;
+void handleL_output(char** lines, int linesSize, char* rootPath, char* newPath){   
+    char copy[MAX_INPUT];
     char* begin;
-    char save[50];
+    char save[MAX_INPUT];
     char* pathCopy = malloc(strlen(rootPath));
 
     for (int i = 0; i < linesSize; i++){
-        copy = malloc(strlen(lines[i]));
         strcpy(copy, lines[i]);
         strcpy(pathCopy, rootPath);
         write(file, copy, strlen(copy));
         write(file, "\n", 1);
 
         begin = strstr(copy, rootPath);
+        write(file, copy, strlen(copy));
+        write(file, "\n", 1);
         char* beginCopy = begin;
 
         while(*begin != '\0'){

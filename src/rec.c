@@ -174,8 +174,8 @@ int init(int all, int b, int B, int Bsize, int path,
                         }
 
                         if ((!mDepth || (maxDepth > 0))) {
-                            //handleL_output(lines, linesSize, rootPath, fp);
-                            write(STDOUT_FILENO, content, strlen(content));
+                            handleL_output(lines, linesSize, rootPath, fp);
+                            //write(STDOUT_FILENO, content, strlen(content));
                             write(file, content, strlen(content));
                         }
                         

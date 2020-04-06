@@ -1,7 +1,0 @@
-Root path: /home/joao/Desktop/FEUP/2o ano/2o semestre/SOPE-simpledu/example/D2
-118      /home/joao/Desktop/FEUP/2o ano/2o semestre/SOPE-simpledu/example/D2/F2.BIN 
-sktop/FEUP/2o ano/2o semestre/SOPE-simpledu/example/D2
-Root path: /home/joao/Desktop/FEUP/2o ano/2o semestre/SOPE-simpledu/example/D2
-118      /home/joao/Desktop/FEUP/2o ano/2o semestre/SOPE-simpledu/example/D2/F2.BIN 
-4214     /home/joao/Desktop/FEUP/2o ano/2o semestre/SOPE-simpledu/example/D2 
-Root path: /home/joao/Desktop/FEUP/2o ano/2o semestre/SOPE-simpledu/example/D2
