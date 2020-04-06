@@ -16,7 +16,6 @@ void int_to_char(int no, char* ch){
 
 void printCMD(char** cmd, int file){
     int j = 0;
-    write(file, "Printing command...\n", strlen("Printing command...\n"));
     while (cmd[j] != 0){
         write(file, cmd[j], strlen(cmd[j]));
         write(file, "  ", strlen("  "));
@@ -67,7 +66,7 @@ void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int m
         cmd[i] = str;
         i++;
     }
-    printCMD(cmd, file);
+    //printCMD(cmd, file);
 }
 
 void round_up_4096(long * num){
@@ -122,9 +121,19 @@ void add_initial_numbers(char** lines, int* dirSize, char* to, char* from, int f
     copy = malloc(strlen(lines[lineSize-1]));
     strcpy(copy, lines[lineSize-1]);
 
+    // write(file, "Last line ", strlen("Last line "));
+    // write(file, copy, strlen(copy));
+    // write(file, "\n", 1);
+
     num = strtok(copy, " ");
 
     *dirSize += atoi(num);
+
+    // write(file, "Adding ", strlen("Adding "));
+    // write(file, num, strlen(num));
+    // write(file, " to ", strlen(" to "));
+    // write(file, to, strlen(to));
+    // write(file, "\n", 1);
 
     free(copy);
 }

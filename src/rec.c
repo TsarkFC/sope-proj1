@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <limits.h>
 
 //---Files
 #include "utils.h"
@@ -119,24 +120,72 @@ int init(int all, int b, int B, int Bsize, int path,
                     }
                 }
             }
-
             memset(directoryname, 0, sizeof(directoryname));
         }
         
         else{ //Links
             long num = stat_buf.st_size;
             char sendFile[50];
+            char* rootPath;
 
             if(!(b && !B)){
                 num = 0;
             }
 
-            if (all && (!mDepth || maxDepth > 0)) {
-                sprintf(sendFile, "%-8ld %s \n", num, fp);
-                write(STDOUT_FILENO, sendFile, strlen(sendFile));
+            if (!L){
+                if (all && (!mDepth || maxDepth > 0)) {
+                    sprintf(sendFile, "%-8ld %s \n", num, fp);
+                    write(STDOUT_FILENO, sendFile, strlen(sendFile));
+                }
+
+                dirSize += num;
+            }
+            else{
+                rootPath = realpath(fp, NULL);
+                write(file, "Root path: ", strlen("Root path: "));
+                write(file, rootPath, strlen(rootPath));
+                write(file, "\n", 1);
+
+                pid = fork();
+
+                if (pid == 0 ){
+                    if (mDepth) maxDepth--;
+                    cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, rootPath, cmd, file);
+
+                    close(pp[READ]);
+                    if (dup2(pp[WRITE], STDOUT_FILENO) == -1) printf("Dup error %s\n", strerror(errno));
+                    execvp("./simpledu", cmd);
+                }
+
+                else if (pid > 0){
+                    wait(&status);
+
+                    close(pp[WRITE]);
+                    char content[PATH_MAX];
+                    char copy[PATH_MAX];
+
+                    while (read(pp[READ], content, PATH_MAX)){
+                        strcpy(copy, content);
+                        char* lines[MAX_INPUT] = { '\0' };
+                        int linesSize = line_divider(copy, lines, file);
+                        
+                        if (!S){
+                            add_initial_numbers(lines, &dirSize, pathAd, fp, file, linesSize);
+                        }
+
+                        if ((!mDepth || (maxDepth > 0))) {
+                            //handleL_output(lines, linesSize, rootPath, fp);
+                            write(STDOUT_FILENO, content, strlen(content));
+                            write(file, content, strlen(content));
+                        }
+                        
+                        memset(content, 0, sizeof(content));
+                        freeLines(lines, linesSize);
+                    }
+                }
             }
 
-            dirSize += num;
+            
         }
     }
 
