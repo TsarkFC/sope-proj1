@@ -16,6 +16,7 @@
 //---Files
 #include "utils.h"
 #include "flags.h"
+#include "reg.h"
 
 extern int file;
 
@@ -81,7 +82,6 @@ int init(int all, int b, int B, int Bsize, int path,
         }
         
         else if (S_ISDIR(stat_buf.st_mode)) {
-
             strcpy(directoryname, direntp->d_name);
             if(check_point_folders(directoryname)){
                 pid = fork();
@@ -123,7 +123,7 @@ int init(int all, int b, int B, int Bsize, int path,
             memset(directoryname, 0, sizeof(directoryname));
         }
         
-        else{ //Links
+        else if (S_ISLNK(stat_buf.st_mode)){
             long num = stat_buf.st_size;
             char sendFile[50];
             char* rootPath;
@@ -175,8 +175,6 @@ int init(int all, int b, int B, int Bsize, int path,
 
                         if ((!mDepth || (maxDepth > 0))) {
                             handleL_output(lines, linesSize, rootPath, fp);
-                            //write(STDOUT_FILENO, content, strlen(content));
-                            write(file, content, strlen(content));
                         }
                         
                         memset(content, 0, sizeof(content));

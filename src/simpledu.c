@@ -11,11 +11,13 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <time.h>
 
 //---Files
 #include "utils.h"
 #include "rec.h"
 #include "flags.h"
+#include "reg.h"
 
 // ./simpledu -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]
 
@@ -30,6 +32,8 @@
 int file;
 
 int main(int argc, char *argv[]){
+
+    clock_t begin = clock();
 
     //TO KNOW WHAT IS RECEIVED THROUGHT EXEC
     // for (int i = 0; i < argc; i++){
@@ -97,8 +101,23 @@ int main(int argc, char *argv[]){
     //Set default path
     if (!path) strcpy(pathAd,".");
 
-    file = open("reg.txt", O_WRONLY | O_APPEND);
+    char log_file[MAX_INPUT];
+
+    if (getenv("LOG_FILENAME") == NULL){
+        strcpy(log_file, "reg.txt");
+    }else strcpy(log_file, getenv("LOG_FILENAME"));
+
+    file = open(log_file, O_CREAT | O_WRONLY | O_APPEND, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    if (file == -1){
+        printf("File error (change) %s\n", strerror(errno));
+    }
+
+    char test[50];
+    sprintf(test, "%ld\n", begin);
+    write(file, test, strlen(test));
+
     init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, pathAd);
+    
     close(file);
 
     return 0;
