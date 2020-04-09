@@ -89,7 +89,23 @@ int init(int all, int b, int B, int Bsize, int path,
             
         }
         
-        else if (S_ISDIR(stat_buf.st_mode)) {
+        else if (!L && S_ISLNK(stat_buf.st_mode)){
+            long num = stat_buf.st_size;
+            if (!(b && !B)){
+                num = stat_buf.st_blocks*512 / Bsize;
+            }
+
+            if (all && (!mDepth || maxDepth > 0)) {
+                char sendFile[50];
+                sprintf(sendFile, "%ld\t%s \n", num, fp);
+                write(STDOUT_FILENO, sendFile, strlen(sendFile));
+                send_pipe(sendFile);
+            }
+
+            dirSize += num;
+        }
+
+        else{
             strcpy(directoryname, direntp->d_name);
             if(check_point_folders(directoryname)){
                 entry(stat_buf.st_size, B, Bsize, fp);
@@ -134,72 +150,6 @@ int init(int all, int b, int B, int Bsize, int path,
                 }
             }
             memset(directoryname, 0, sizeof(directoryname));
-        }
-        
-        else if (S_ISLNK(stat_buf.st_mode)){
-            long num = stat_buf.st_size;
-            char sendFile[50];
-            char* rootPath;
-
-            if(!(b && !B)){
-                num = 0;
-            }
-
-            if (!L){
-                if (all && (!mDepth || maxDepth > 0)) {
-                    sprintf(sendFile, "%ld\t%s \n", num, fp);
-                    write(STDOUT_FILENO, sendFile, strlen(sendFile));
-                    send_pipe(sendFile);
-                }
-
-                dirSize += num;
-            }
-            else{
-                rootPath = realpath(fp, NULL);
-
-                entry(stat_buf.st_size, B, Bsize, fp);
-                set_lasttime();
-                write_create(cmd);
-                
-                pid = fork();
-
-                if (pid == 0 ){
-                    if (mDepth) maxDepth--;
-                    cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, rootPath, cmd, file);
-
-                    close(pp[READ]);
-                    if (dup2(pp[WRITE], STDOUT_FILENO) == -1) printf("Dup error %s\n", strerror(errno));
-                    execvp("./simpledu", cmd);
-                }
-
-                else if (pid > 0){
-                    wait(&status);
-
-                    close(pp[WRITE]);
-                    char content[LIMITER];
-                    char copy[LIMITER];
-
-                    while (read(pp[READ], content, LIMITER)){
-                        strcpy(copy, content);
-
-                        receive_pipe(copy);
-
-                        char* lines[MAX_INPUT] = { '\0' };
-                        int linesSize = line_divider(copy, lines, file);
-                        
-                        if (!S){
-                            add_initial_numbers(lines, &dirSize, pathAd, fp, file, linesSize);
-                        }
-
-                        if ((!mDepth || (maxDepth > 0))) {
-                            handleL_output(lines, linesSize, rootPath, fp);
-                        }
-                        
-                        memset(content, 0, sizeof(content));
-                        freeLines(lines, linesSize);
-                    }
-                }
-            }
         }
     }
 
