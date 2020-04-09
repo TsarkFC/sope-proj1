@@ -72,18 +72,20 @@ int init(int all, int b, int B, int Bsize, int path,
             entry(num, B, Bsize, fp);
             char sendFile[50];
 
-            if(!(b && !B)){
-                round_up_4096(&num);
-                num = (num) / Bsize + (num % Bsize != 0);
-            }
+            // dirSize += num;
 
-            if (all && (!mDepth || maxDepth > 0)) {
+            if(!(b && !B)){
+                //round_up_4096(&num);
+                //num = (num) / Bsize + (num % Bsize != 0);
+                num = stat_buf.st_blocks*512/Bsize + ((stat_buf.st_blocks*512)%Bsize != 0);
+                dirSize += stat_buf.st_blocks*512;
+            }
+            else dirSize += num;
+
+            if ((!mDepth || maxDepth > 0)) {
                 sprintf(sendFile, "%ld\t%s \n", num, fp);
                 write(STDOUT_FILENO, sendFile, strlen(sendFile));
             }
-            
-            dirSize += num;
-            
         }
         
         else if (!L && S_ISLNK(stat_buf.st_mode)){
@@ -148,19 +150,16 @@ int init(int all, int b, int B, int Bsize, int path,
         }
     }
 
-    if (b && !B){
-        dirSize += 4096;
-    }
-    else{
-        long tempSize = 4096;
-        round_up_4096(&tempSize);
-        tempSize = tempSize / Bsize + (tempSize % Bsize != 0);
-        dirSize += tempSize;
-    }
+    
+    dirSize += 4096;
 
     char* sendDir = malloc(MAX_INPUT);
-    sprintf(sendDir,"%d\t%s \n", dirSize, pathAd);
-    if ((!mDepth || (maxDepth >= 0))) {
+
+    long copy = dirSize;
+    if (!b) copy = dirSize / Bsize + (dirSize % Bsize != 0);
+
+    sprintf(sendDir,"%ld\t%s \n", copy, pathAd);
+    if ((!mDepth || maxDepth > 0)) {
         write(STDOUT_FILENO, sendDir, strlen(sendDir));
     }
     free(sendDir);

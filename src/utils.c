@@ -42,15 +42,15 @@ void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int m
 }
 
 void round_up_4096(long * num){
-    char test1[50];
-    int_to_char(*num, test1);
 
     if (*num == 0) return;
-    int no = 0;
-    while(*num > no){
-        no += 4096;
-    }
-    *num = no;
+    // int no = 0;
+    // while(*num > no){
+    //     no += 4096;
+    // }
+    // *num = no;
+
+    if (*num % 4096 != 0) *num = (*num / 4096) * 4096 + 4096;
 }
 
 _Bool is_number(char*a){
