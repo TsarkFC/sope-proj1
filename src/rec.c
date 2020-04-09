@@ -17,6 +17,7 @@
 #include "utils.h"
 #include "flags.h"
 #include "reg.h"
+#include "rec.h"
 
 extern int file;
 
@@ -73,7 +74,7 @@ int init(int all, int b, int B, int Bsize, int path,
             }
 
             if (all && (!mDepth || maxDepth > 0)) {
-                sprintf(sendFile, "%-8ld %s \n", num, fp);
+                sprintf(sendFile, "%ld\t%s \n", num, fp);
                 write(STDOUT_FILENO, sendFile, strlen(sendFile));
             }
             
@@ -84,12 +85,14 @@ int init(int all, int b, int B, int Bsize, int path,
         else if (S_ISDIR(stat_buf.st_mode)) {
             strcpy(directoryname, direntp->d_name);
             if(check_point_folders(directoryname)){
+                
+                set_lasttime();
+                write_create(cmd);
                 pid = fork();
 
                 if (pid == 0 ){
                     if (mDepth) maxDepth--;
                     cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp, cmd, file);
-
                     close(pp[READ]);
                     if (dup2(pp[WRITE], STDOUT_FILENO) == -1) printf("Dup error %s\n", strerror(errno));
                     execvp("./simpledu", cmd);
@@ -99,10 +102,10 @@ int init(int all, int b, int B, int Bsize, int path,
                     wait(&status);
 
                     close(pp[WRITE]);
-                    char content[PATH_MAX];
-                    char copy[PATH_MAX];
+                    char content[999999];
+                    char copy[999999];
 
-                    while (read(pp[READ], content, PATH_MAX)){
+                    while (read(pp[READ], content, 999999)){
                         strcpy(copy, content);
                         char* lines[MAX_INPUT] = { '\0' };
                         int linesSize = line_divider(copy, lines, file);
@@ -134,7 +137,7 @@ int init(int all, int b, int B, int Bsize, int path,
 
             if (!L){
                 if (all && (!mDepth || maxDepth > 0)) {
-                    sprintf(sendFile, "%-8ld %s \n", num, fp);
+                    sprintf(sendFile, "%ld\t%s \n", num, fp);
                     write(STDOUT_FILENO, sendFile, strlen(sendFile));
                 }
 
@@ -142,10 +145,7 @@ int init(int all, int b, int B, int Bsize, int path,
             }
             else{
                 rootPath = realpath(fp, NULL);
-                write(file, "Root path: ", strlen("Root path: "));
-                write(file, rootPath, strlen(rootPath));
-                write(file, "\n", 1);
-
+                set_lasttime();
                 pid = fork();
 
                 if (pid == 0 ){
@@ -161,10 +161,10 @@ int init(int all, int b, int B, int Bsize, int path,
                     wait(&status);
 
                     close(pp[WRITE]);
-                    char content[PATH_MAX];
-                    char copy[PATH_MAX];
+                    char content[LIMITER];
+                    char copy[LIMITER];
 
-                    while (read(pp[READ], content, PATH_MAX)){
+                    while (read(pp[READ], content, LIMITER)){
                         strcpy(copy, content);
                         char* lines[MAX_INPUT] = { '\0' };
                         int linesSize = line_divider(copy, lines, file);
@@ -182,8 +182,6 @@ int init(int all, int b, int B, int Bsize, int path,
                     }
                 }
             }
-
-            
         }
     }
 
@@ -198,7 +196,7 @@ int init(int all, int b, int B, int Bsize, int path,
     }
 
     char sendDir[50];
-    sprintf(sendDir,"%-8d %s \n", dirSize, pathAd);
+    sprintf(sendDir,"%d\t%s \n", dirSize, pathAd);
     write(STDOUT_FILENO, sendDir, strlen(sendDir));
     
 

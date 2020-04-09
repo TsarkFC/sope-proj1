@@ -45,7 +45,7 @@ void handleB_output(char** lines, int linesSize, int Bsize){
         write(file, "\n", 1);
 
         char sendDir[50];
-        sprintf(sendDir,"%-8ld %s \n", size, path);
+        sprintf(sendDir,"%ld\t%s \n", size, path);
         write(STDOUT_FILENO, sendDir, strlen(sendDir));
         write(file, sendDir, strlen(sendDir));
 

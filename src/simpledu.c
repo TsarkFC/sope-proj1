@@ -33,13 +33,7 @@ int file;
 
 int main(int argc, char *argv[]){
 
-    clock_t begin = clock();
-
-    //TO KNOW WHAT IS RECEIVED THROUGHT EXEC
-    // for (int i = 0; i < argc; i++){
-    //     printf("%s ", argv[i]);
-    // }
-    // printf("\n");
+    clock_t begin = set_initialtime();
 
     //'boolean' variable initialization
     int all = 0;
@@ -51,14 +45,14 @@ int main(int argc, char *argv[]){
     int mDepth = 0; int maxDepth = 0; //maxDepth corresponds to max depth value
 
     //worng usage
-    if (argc > 10 || argc < 2 || strcmp(argv[1], "-l") != 0){ 
-        write(STDOUT_FILENO, "USAGE: ./simpledu -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n",
-        strlen("USAGE: ./simpledu -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n"));
+    if (argc > 10){ 
+        write(STDOUT_FILENO, "USAGE: ./simpledu [-l] [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n",
+        strlen("USAGE: ./simpledu [-l] [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n"));
         exit(1);
     }
 
     //interpret argv content
-    for (int i = 2; i < argc; i++){
+    for (int i = 1; i < argc; i++){
 
         //set fot [-a] or [-all]
         if (strcmp(argv[i],"-a") == 0 || strcmp(argv[i],"-all") == 0) all = 1;
@@ -90,6 +84,7 @@ int main(int argc, char *argv[]){
                 mDepth = 1;
             }
         }
+        else if (strcmp(argv[i],"-l") == 0) continue;
 
         //set for path
         else{
@@ -111,10 +106,6 @@ int main(int argc, char *argv[]){
     if (file == -1){
         printf("File error (change) %s\n", strerror(errno));
     }
-
-    char test[50];
-    sprintf(test, "%ld\n", begin);
-    write(file, test, strlen(test));
 
     init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, pathAd);
     

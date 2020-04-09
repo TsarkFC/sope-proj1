@@ -31,3 +31,5 @@ int line_divider(char content[], char** lines, int file);
 void add_initial_numbers(char** lines, int* dirSize, char* to, char* from, int file, int lineSize);
 
 void freeLines(char** lines, int linesSize);
+
+void printCMD(char** cmd, int file);

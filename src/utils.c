@@ -51,22 +51,22 @@ void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int m
         i++;
     }
     if (mDepth){
-        char max[100];
-        char no[100];
+        char max[50];
+        char no[50];
         int_to_char(maxDepth, no);
         sprintf(max, "%s%s", "--max-depth=",no);
-        cmd[i] = max;
+        cmd[i]= max;
         i++;
     }
     if (B) {
-        char str[100] = "";
+        char str[50];
         cmd[i] = "-B";
         i++;
         int_to_char(Bsize, str);
         cmd[i] = str;
         i++;
     }
-    //printCMD(cmd, file);
+    printCMD(cmd, file);
 }
 
 void round_up_4096(long * num){
