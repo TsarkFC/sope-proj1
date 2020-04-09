@@ -48,6 +48,7 @@ int main(int argc, char *argv[]){
     if (argc > 10){ 
         write(STDOUT_FILENO, "USAGE: ./simpledu [-l] [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n",
         strlen("USAGE: ./simpledu [-l] [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n"));
+        write_exit(1);
         exit(1);
     }
 
@@ -109,7 +110,7 @@ int main(int argc, char *argv[]){
 
     init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, pathAd);
     
+    write_exit(0);
     close(file);
-
     return 0;
 }

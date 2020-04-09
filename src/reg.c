@@ -16,6 +16,7 @@
 
 //-----Files
 #include "utils.h"
+#include "reg.h"
 
 extern int file;
 
@@ -40,7 +41,7 @@ void set_lasttime(){
 
     char time[50];
     sprintf(time, "%ld", last + atoi(getenv("TIME")));
-    setenv("LAST", time, 0);
+    setenv("TIME", time, 0);
 }
 
 double set_time(){
@@ -48,20 +49,39 @@ double set_time(){
 
     clock_t current = clock();
 
-    double ret = (current + time) / CLOCKS_PER_SEC;
-    ret *= 0.01;
-    char test[50];
-    sprintf(test, "NUMBER: %ld\n", current + time);
-    write(file, test, strlen(test));
+    double ret = (double)(current + time) / CLOCKS_PER_SEC;
+    ret *= 1000;
+    return ret;
 }
 
 void write_create(char** cmd){
+    char writecreate[10] = "CREATE";
     char create[50];
-    sprintf(create, "%f - %-8d - CREATE - ", set_time(), getpid());
+    sprintf(create, "%f - %-8d - %-10s - ", set_time(), getpid(), writecreate);
     write(file, create, strlen(create));
     printCMD(cmd, file);
 }
 
-int write_exit(){
-    return 0;
+void write_exit(int exit_code){
+    char writeexit[10] = "EXIT";
+    char code[50];
+    sprintf(code, "%f - %-8d - %-10s - %d\n", set_time(), getpid(), writeexit, exit_code);
+    write(file, code, strlen(code));
+}
+
+void receive_pipe(char* received){
+    char receivepipe[10] = "RECV_PIPE";
+    char receive[LIMITER];
+    sprintf(receive, "%f - %-8d - %-10s - (block bellow)\n", set_time(), getpid(), receivepipe);
+    write(file, receive, strlen(receive));
+    write(file, "--------------------------\n", strlen("--------------------------\n"));
+    write(file, received, strlen(received));
+    write(file, "--------------------------\n", strlen("--------------------------\n"));
+}
+
+void send_pipe(char* sent){
+    char sendpipe[10] = "SEND_PIPE";
+    char send[PATH_MAX];
+    sprintf(send, "%f - %-8d - %-10s - %s", set_time(), getpid(), sendpipe, sent);
+    write(file, send, strlen(send));
 }

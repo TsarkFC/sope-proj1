@@ -21,7 +21,7 @@ void printCMD(char** cmd, int file){
         write(file, "  ", strlen("  "));
         j++;
     }
-    write(file, "\n", 1);
+    //write(file, "\n", 1);
 }
 
 void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, int maxDepth, char* pathAd, char** cmd, int file){
@@ -67,6 +67,7 @@ void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int m
         i++;
     }
     printCMD(cmd, file);
+    write(file, "\n", 1);
 }
 
 void round_up_4096(long * num){

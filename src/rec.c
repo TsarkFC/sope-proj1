@@ -50,6 +50,7 @@ int init(int all, int b, int B, int Bsize, int path,
         sprintf(test, "Path error: %s\n", pathAd);
         write(file, test, strlen(test));
         perror(pathAd);
+        write_exit(2);
         exit(2);
     }
 
@@ -61,6 +62,7 @@ int init(int all, int b, int B, int Bsize, int path,
 
         if (lstat(fp, &stat_buf)==-1){
             perror("lstat ERROR");
+            write_exit(3);
             exit(3);
         }
 
@@ -76,6 +78,7 @@ int init(int all, int b, int B, int Bsize, int path,
             if (all && (!mDepth || maxDepth > 0)) {
                 sprintf(sendFile, "%ld\t%s \n", num, fp);
                 write(STDOUT_FILENO, sendFile, strlen(sendFile));
+                send_pipe(sendFile);
             }
             
             dirSize += num;
@@ -107,6 +110,9 @@ int init(int all, int b, int B, int Bsize, int path,
 
                     while (read(pp[READ], content, 999999)){
                         strcpy(copy, content);
+
+                        receive_pipe(copy);
+
                         char* lines[MAX_INPUT] = { '\0' };
                         int linesSize = line_divider(copy, lines, file);
                         
@@ -139,6 +145,7 @@ int init(int all, int b, int B, int Bsize, int path,
                 if (all && (!mDepth || maxDepth > 0)) {
                     sprintf(sendFile, "%ld\t%s \n", num, fp);
                     write(STDOUT_FILENO, sendFile, strlen(sendFile));
+                    send_pipe(sendFile);
                 }
 
                 dirSize += num;
@@ -197,9 +204,9 @@ int init(int all, int b, int B, int Bsize, int path,
 
     char sendDir[50];
     sprintf(sendDir,"%d\t%s \n", dirSize, pathAd);
+    send_pipe(sendDir);
     write(STDOUT_FILENO, sendDir, strlen(sendDir));
     
-
     closedir(dirp);
 
     return 0;
