@@ -1,4 +1,4 @@
-#define LIMITER 999999
+#define LIMITER 1000000
 
 void write_create(char** cmd);
 
@@ -11,3 +11,5 @@ void set_lasttime();
 void send_pipe(char* sent);
 
 void receive_pipe(char* received);
+
+void entry(long size, int B, int Bsize, char* path);

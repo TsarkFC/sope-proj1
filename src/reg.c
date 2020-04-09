@@ -72,7 +72,7 @@ void write_exit(int exit_code){
 void receive_pipe(char* received){
     char receivepipe[10] = "RECV_PIPE";
     char receive[LIMITER];
-    sprintf(receive, "%f - %-8d - %-10s - (block bellow)\n", set_time(), getpid(), receivepipe);
+    sprintf(receive, "%f - %-8d - %-10s - (block below)\n", set_time(), getpid(), receivepipe);
     write(file, receive, strlen(receive));
     write(file, "--------------------------\n", strlen("--------------------------\n"));
     write(file, received, strlen(received));
@@ -83,5 +83,17 @@ void send_pipe(char* sent){
     char sendpipe[10] = "SEND_PIPE";
     char send[PATH_MAX];
     sprintf(send, "%f - %-8d - %-10s - %s", set_time(), getpid(), sendpipe, sent);
+    write(file, send, strlen(send));
+}
+
+void entry(long size, int B, int Bsize, char* path){
+    if (B){
+        round_up_4096(&size);
+        size = size / Bsize + (size % Bsize != 0);
+    } 
+
+    char entry[10] = "ENTRY";
+    char send[PATH_MAX];
+    sprintf(send, "%f - %-8d - %-10s - %-8ld %s\n", set_time(), getpid(), entry, size, path);
     write(file, send, strlen(send));
 }

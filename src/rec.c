@@ -44,6 +44,9 @@ int init(int all, int b, int B, int Bsize, int path,
 
     int dirSize = 0;
 
+    int ppB[2];
+    pipe(ppB);
+
     if ((dirp = opendir(pathAd)) == NULL)
     {
         char test[50];
@@ -68,11 +71,12 @@ int init(int all, int b, int B, int Bsize, int path,
 
         if (S_ISREG(stat_buf.st_mode)) {
             long num = stat_buf.st_size;
+            entry(num, B, Bsize, fp);
             char sendFile[50];
 
             if(!(b && !B)){
                 round_up_4096(&num);
-                num = (num + Bsize/2) / Bsize;
+                num = (num) / Bsize + (num % Bsize != 0);
             }
 
             if (all && (!mDepth || maxDepth > 0)) {
@@ -88,7 +92,7 @@ int init(int all, int b, int B, int Bsize, int path,
         else if (S_ISDIR(stat_buf.st_mode)) {
             strcpy(directoryname, direntp->d_name);
             if(check_point_folders(directoryname)){
-                
+                entry(stat_buf.st_size, B, Bsize, fp);
                 set_lasttime();
                 write_create(cmd);
                 pid = fork();
@@ -105,10 +109,10 @@ int init(int all, int b, int B, int Bsize, int path,
                     wait(&status);
 
                     close(pp[WRITE]);
-                    char content[999999];
-                    char copy[999999];
+                    char content[LIMITER];
+                    char copy[LIMITER];
 
-                    while (read(pp[READ], content, 999999)){
+                    while (read(pp[READ], content, LIMITER)){
                         strcpy(copy, content);
 
                         receive_pipe(copy);
@@ -152,7 +156,11 @@ int init(int all, int b, int B, int Bsize, int path,
             }
             else{
                 rootPath = realpath(fp, NULL);
+
+                entry(stat_buf.st_size, B, Bsize, fp);
                 set_lasttime();
+                write_create(cmd);
+                
                 pid = fork();
 
                 if (pid == 0 ){
@@ -173,6 +181,9 @@ int init(int all, int b, int B, int Bsize, int path,
 
                     while (read(pp[READ], content, LIMITER)){
                         strcpy(copy, content);
+
+                        receive_pipe(copy);
+
                         char* lines[MAX_INPUT] = { '\0' };
                         int linesSize = line_divider(copy, lines, file);
                         
@@ -198,7 +209,7 @@ int init(int all, int b, int B, int Bsize, int path,
     else{
         long tempSize = 4096;
         round_up_4096(&tempSize);
-        tempSize = ((tempSize + Bsize/2) / Bsize);
+        tempSize = tempSize / Bsize;
         dirSize += tempSize;
     }
 

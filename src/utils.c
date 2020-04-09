@@ -102,7 +102,7 @@ int check_point_folders(char* directoryname){
     return 0;
 }
 
-int line_divider(char content[], char** lines, int file){
+int line_divider(char content[], char* lines[], int file){
     char* line;
     line = strtok(content, "\n");
     int i = 0;

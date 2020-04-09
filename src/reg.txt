@@ -1,115 +1,96 @@
-1.709000 - 9570     - CREATE     - ./simpledu  -l  -a  -b  ../example/D2  
-2.001000 - 9571     - SEND_PIPE  - 118	../example/D2/F2.BIN 
-2.030000 - 9571     - SEND_PIPE  - 4214	../example/D2 
-2.042000 - 9571     - EXIT       - 0
-1.863000 - 9570     - RECV_PIPE  - (block bellow)
+1.794000 - 16847    - ENTRY      - 4096     ../example/D2
+1.854000 - 16847    - CREATE     - ./simpledu  -l  -a  -b  ../example/D2  -L  
+2.426000 - 16848    - ENTRY      - 118      ../example/D2/F2.BIN
+2.455000 - 16848    - SEND_PIPE  - 118	../example/D2/F2.BIN 
+2.477000 - 16848    - SEND_PIPE  - 4214	../example/D2 
+2.489000 - 16848    - EXIT       - 0
+1.990000 - 16847    - RECV_PIPE  - (block below)
 --------------------------
 118	../example/D2/F2.BIN 
 4214	../example/D2 
 --------------------------
-2.578000 - 9570     - SEND_PIPE  - 293	../example/f.txt 
-2.610000 - 9570     - CREATE     - ./simpledu  -l  -a  -b  ../example/D1  
-2.130000 - 9572     - CREATE     - ./simpledu  -l  -a  -b  ../example/D1/Da  
-2.758000 - 9573     - SEND_PIPE  - 158	../example/D1/Da/F3.BIN 
-2.788000 - 9573     - SEND_PIPE  - 4254	../example/D1/Da 
-2.799000 - 9573     - EXIT       - 0
-2.269000 - 9572     - RECV_PIPE  - (block bellow)
+2.778000 - 16847    - ENTRY      - 293      ../example/f.txt
+2.802000 - 16847    - SEND_PIPE  - 293	../example/f.txt 
+2.821000 - 16847    - ENTRY      - 4096     ../example/D1
+2.835000 - 16847    - CREATE     - ./simpledu  -l  -a  -b  ../example/D1  -L  
+2.471000 - 16849    - ENTRY      - 4096     ../example/D1/Da
+2.498000 - 16849    - CREATE     - ./simpledu  -l  -a  -b  ../example/D1/Da  -L  
+2.992000 - 16850    - ENTRY      - 158      ../example/D1/Da/F3.BIN
+3.019000 - 16850    - SEND_PIPE  - 158	../example/D1/Da/F3.BIN 
+3.038000 - 16850    - SEND_PIPE  - 4254	../example/D1/Da 
+3.050000 - 16850    - EXIT       - 0
+2.661000 - 16849    - RECV_PIPE  - (block below)
 --------------------------
 158	../example/D1/Da/F3.BIN 
 4254	../example/D1/Da 
 --------------------------
-2.978000 - 9572     - SEND_PIPE  - 96	../example/D1/src.c 
-3.005000 - 9572     - CREATE     - ./simpledu  -l  -a  -b  ../example/D1/Db  
-3.075000 - 9574     - CREATE     - ./simpledu  -l  -a  -b  ../example/D1/Db/Dx  
-3.163000 - 9575     - SEND_PIPE  - 39	../example/D1/Db/Dx/doc.pdf 
-3.176000 - 9575     - SEND_PIPE  - 62	../example/D1/Db/Dx/output.log 
-3.185000 - 9575     - SEND_PIPE  - 11	../example/D1/Db/Dx/symlink 
-3.191000 - 9575     - SEND_PIPE  - 4208	../example/D1/Db/Dx 
-3.196000 - 9575     - EXIT       - 0
-3.201000 - 9574     - RECV_PIPE  - (block bellow)
+3.424000 - 16849    - ENTRY      - 96       ../example/D1/src.c
+3.438000 - 16849    - SEND_PIPE  - 96	../example/D1/src.c 
+3.465000 - 16849    - ENTRY      - 4096     ../example/D1/Db
+3.470000 - 16849    - CREATE     - ./simpledu  -l  -a  -b  ../example/D1/Db  -L  
+2.346000 - 16851    - ENTRY      - 4096     ../example/D1/Db/Dx
+2.357000 - 16851    - CREATE     - ./simpledu  -l  -a  -b  ../example/D1/Db/Dx  -L  
+2.555000 - 16852    - ENTRY      - 39       ../example/D1/Db/Dx/doc.pdf
+2.566000 - 16852    - SEND_PIPE  - 39	../example/D1/Db/Dx/doc.pdf 
+2.573000 - 16852    - ENTRY      - 62       ../example/D1/Db/Dx/output.log
+2.577000 - 16852    - SEND_PIPE  - 62	../example/D1/Db/Dx/output.log 
+2.599000 - 16852    - ENTRY      - 11       ../example/D1/Db/Dx/symlink
+2.605000 - 16852    - CREATE     - ./simpledu  -l  -a  -b  /home/joao/Desktop/FEUP/2o ano/2o semestre/SOPE-simpledu/example/D2  -L  
+2.800000 - 16853    - ENTRY      - 118      /home/joao/Desktop/FEUP/2o ano/2o semestre/SOPE-simpledu/example/D2/F2.BIN
+2.807000 - 16853    - SEND_PIPE  - 118	/home/joao/Desktop/FEUP/2o ano/2o semestre/SOPE-simpledu/example/D2/F2.BIN 
+2.815000 - 16853    - SEND_PIPE  - 4214	/home/joao/Desktop/FEUP/2o ano/2o semestre/SOPE-simpledu/example/D2 
+2.818000 - 16853    - EXIT       - 0
+2.687000 - 16852    - RECV_PIPE  - (block below)
+--------------------------
+118	/home/joao/Desktop/FEUP/2o ano/2o semestre/SOPE-simpledu/example/D2/F2.BIN 
+4214	/home/joao/Desktop/FEUP/2o ano/2o semestre/SOPE-simpledu/example/D2 
+--------------------------
+3.127000 - 16852    - SEND_PIPE  - 8411	../example/D1/Db/Dx 
+3.137000 - 16852    - EXIT       - 0
+2.400000 - 16851    - RECV_PIPE  - (block below)
 --------------------------
 39	../example/D1/Db/Dx/doc.pdf 
 62	../example/D1/Db/Dx/output.log 
-11	../example/D1/Db/Dx/symlink 
-4208	../example/D1/Db/Dx 
+118	../example/D1/Db/Dx/symlink/F2.BIN 
+4214	../example/D1/Db/Dx/symlink 
+8411	../example/D1/Db/Dx 
 --------------------------
-3.622000 - 9574     - SEND_PIPE  - 77	../example/D1/Db/pkg.deb 
-3.639000 - 9574     - SEND_PIPE  - 99	../example/D1/Db/arquive.zip 
-3.649000 - 9574     - SEND_PIPE  - 8480	../example/D1/Db 
-3.659000 - 9574     - EXIT       - 0
-3.147000 - 9572     - RECV_PIPE  - (block bellow)
+2.810000 - 16851    - ENTRY      - 77       ../example/D1/Db/pkg.deb
+2.818000 - 16851    - SEND_PIPE  - 77	../example/D1/Db/pkg.deb 
+2.826000 - 16851    - ENTRY      - 99       ../example/D1/Db/arquive.zip
+2.829000 - 16851    - SEND_PIPE  - 99	../example/D1/Db/arquive.zip 
+2.834000 - 16851    - SEND_PIPE  - 12683	../example/D1/Db 
+2.840000 - 16851    - EXIT       - 0
+3.596000 - 16849    - RECV_PIPE  - (block below)
 --------------------------
 39	../example/D1/Db/Dx/doc.pdf 
 62	../example/D1/Db/Dx/output.log 
-11	../example/D1/Db/Dx/symlink 
-4208	../example/D1/Db/Dx 
+118	../example/D1/Db/Dx/symlink/F2.BIN 
+4214	../example/D1/Db/Dx/symlink 
+8411	../example/D1/Db/Dx 
 77	../example/D1/Db/pkg.deb 
 99	../example/D1/Db/arquive.zip 
-8480	../example/D1/Db 
+12683	../example/D1/Db 
 --------------------------
-3.427000 - 9572     - SEND_PIPE  - 233	../example/D1/dep.d 
-3.436000 - 9572     - SEND_PIPE  - 17159	../example/D1 
-3.465000 - 9572     - EXIT       - 0
-2.764000 - 9570     - RECV_PIPE  - (block bellow)
+3.885000 - 16849    - ENTRY      - 233      ../example/D1/dep.d
+3.890000 - 16849    - SEND_PIPE  - 233	../example/D1/dep.d 
+3.918000 - 16849    - SEND_PIPE  - 21362	../example/D1 
+3.932000 - 16849    - EXIT       - 0
+3.036000 - 16847    - RECV_PIPE  - (block below)
 --------------------------
 158	../example/D1/Da/F3.BIN 
 4254	../example/D1/Da 
 96	../example/D1/src.c 
 39	../example/D1/Db/Dx/doc.pdf 
 62	../example/D1/Db/Dx/output.log 
-11	../example/D1/Db/Dx/symlink 
-4208	../example/D1/Db/Dx 
+118	../example/D1/Db/Dx/symlink/F2.BIN 
+4214	../example/D1/Db/Dx/symlink 
+8411	../example/D1/Db/Dx 
 77	../example/D1/Db/pkg.deb 
 99	../example/D1/Db/arquive.zip 
-8480	../example/D1/Db 
+12683	../example/D1/Db 
 233	../example/D1/dep.d 
-17159	../example/D1 
+21362	../example/D1 
 --------------------------
-3.409000 - 9570     - SEND_PIPE  - 25762	../example 
-3.422000 - 9570     - EXIT       - 0
-1.688000 - 9808     - CREATE     - ./simpledu  -l  -a  -b  ../example/D2  --max-depth=1  
-2.324000 - 9809     - SEND_PIPE  - 118	../example/D2/F2.BIN 
-2.355000 - 9809     - SEND_PIPE  - 4214	../example/D2 
-2.369000 - 9809     - EXIT       - 0
-1.874000 - 9808     - RECV_PIPE  - (block bellow)
---------------------------
-118	../example/D2/F2.BIN 
-4214	../example/D2 
---------------------------
-2.692000 - 9808     - SEND_PIPE  - 293	../example/f.txt 
-2.724000 - 9808     - CREATE     - ./simpledu  -l  -a  -b  ../example/D1  --max-depth=1  
-2.311000 - 9810     - CREATE     - ./simpledu  -l  -a  -b  ../example/D1/Da  --max-depth=0  
-3.530000 - 9811     - SEND_PIPE  - 4254	../example/D1/Da 
-3.575000 - 9811     - EXIT       - 0
-2.476000 - 9810     - RECV_PIPE  - (block bellow)
---------------------------
-4254	../example/D1/Da 
---------------------------
-3.088000 - 9810     - SEND_PIPE  - 96	../example/D1/src.c 
-3.096000 - 9810     - CREATE     - ./simpledu  -l  -a  -b  ../example/D1/Db  --max-depth=0  
-2.089000 - 9812     - CREATE     - ./simpledu  -l  -a  -b  ../example/D1/Db/Dx  --max-depth=-1  
-2.382000 - 9813     - SEND_PIPE  - 4208	../example/D1/Db/Dx 
-2.392000 - 9813     - EXIT       - 0
-2.153000 - 9812     - RECV_PIPE  - (block bellow)
---------------------------
-4208	../example/D1/Db/Dx 
---------------------------
-2.413000 - 9812     - SEND_PIPE  - 8480	../example/D1/Db 
-2.420000 - 9812     - EXIT       - 0
-3.190000 - 9810     - RECV_PIPE  - (block bellow)
---------------------------
-8480	../example/D1/Db 
---------------------------
-3.406000 - 9810     - SEND_PIPE  - 233	../example/D1/dep.d 
-3.413000 - 9810     - SEND_PIPE  - 17159	../example/D1 
-3.417000 - 9810     - EXIT       - 0
-2.832000 - 9808     - RECV_PIPE  - (block bellow)
---------------------------
-4254	../example/D1/Da 
-96	../example/D1/src.c 
-8480	../example/D1/Db 
-233	../example/D1/dep.d 
-17159	../example/D1 
---------------------------
-3.186000 - 9808     - SEND_PIPE  - 25762	../example 
-3.194000 - 9808     - EXIT       - 0
+3.350000 - 16847    - SEND_PIPE  - 29965	../example 
+3.360000 - 16847    - EXIT       - 0
