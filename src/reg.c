@@ -54,12 +54,11 @@ double set_time(){
     return ret;
 }
 
-void write_create(char** cmd){
+void write_create(){
     char writecreate[10] = "CREATE";
     char create[50];
     sprintf(create, "%f - %-8d - %-10s - ", set_time(), getpid(), writecreate);
     write(file, create, strlen(create));
-    printCMD(cmd, file);
 }
 
 void write_exit(int exit_code){
@@ -72,17 +71,14 @@ void write_exit(int exit_code){
 void receive_pipe(char* received){
     char receivepipe[10] = "RECV_PIPE";
     char receive[LIMITER];
-    sprintf(receive, "%f - %-8d - %-10s - (block below)\n", set_time(), getpid(), receivepipe);
+    sprintf(receive, "%f - %-8d - %-10s - %s\n", set_time(), getpid(), receivepipe, received);
     write(file, receive, strlen(receive));
-    write(file, "--------------------------\n", strlen("--------------------------\n"));
-    write(file, received, strlen(received));
-    write(file, "--------------------------\n", strlen("--------------------------\n"));
 }
 
 void send_pipe(char* sent){
     char sendpipe[10] = "SEND_PIPE";
     char send[PATH_MAX];
-    sprintf(send, "%f - %-8d - %-10s - %s", set_time(), getpid(), sendpipe, sent);
+    sprintf(send, "%f - %-8d - %-10s - %s\n", set_time(), getpid(), sendpipe, sent);
     write(file, send, strlen(send));
 }
 

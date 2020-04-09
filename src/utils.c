@@ -14,59 +14,30 @@ void int_to_char(int no, char* ch){
     sprintf(ch, "%d", no);
 }
 
-void printCMD(char** cmd, int file){
-    int j = 0;
-    while (cmd[j] != 0){
-        write(file, cmd[j], strlen(cmd[j]));
-        write(file, "  ", strlen("  "));
-        j++;
-    }
-    //write(file, "\n", 1);
-}
+void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, int maxDepth, char* pathAd, int file){
 
-void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int mDepth, int maxDepth, char* pathAd, char** cmd, int file){
-    cmd[0] = "./simpledu";
-    cmd[1] = "-l";
-    
-    int i = 2;
+    write(file, "./simpledu -l ", strlen("./simpledu -l "));
 
-    if (all) {
-        cmd[i] = "-a";
-        i++;
-    }
-    if (b) {
-        cmd[i] = "-b";
-        i++;
-    }
-    if (path) {
-        cmd[i] = pathAd;
-        i++;
-    }
-    if (L) {
-        cmd[i] = "-L";
-        i++;
-    }
-    if (S) {
-        cmd[i] = "-S";
-        i++;
-    }
+    if (all) write(file, "-a ", strlen("-a "));
+    if (b) write(file, "-b ", strlen("-b "));
+    if (path) write(file, pathAd, strlen(pathAd));
+    if (L) write(file, "-L ", strlen("-L "));
+    if (S) write(file, "-S ", strlen("-S "));
     if (mDepth){
         char max[50];
         char no[50];
         int_to_char(maxDepth, no);
         sprintf(max, "%s%s", "--max-depth=",no);
-        cmd[i]= max;
-        i++;
+        write(file, max, strlen(max));
+        write(file, " ", 1);
     }
     if (B) {
         char str[50];
-        cmd[i] = "-B";
-        i++;
+        write(file,"-B ", strlen("-B"));
         int_to_char(Bsize, str);
-        cmd[i] = str;
-        i++;
+        write(file ,str, strlen(str));
+        write(file, " ", strlen(" "));
     }
-    printCMD(cmd, file);
     write(file, "\n", 1);
 }
 
@@ -100,48 +71,5 @@ int check_point_folders(char* directoryname){
             return 1;
     }
     return 0;
-}
-
-int line_divider(char content[], char* lines[], int file){
-    char* line;
-    line = strtok(content, "\n");
-    int i = 0;
-    while (line != NULL){
-        lines[i] = malloc(strlen(line));
-        strcpy(lines[i], line);
-        i++;
-        line = strtok(NULL, "\n");
-    }
-
-    return i;
-}
-
-void add_initial_numbers(char** lines, int* dirSize, char* to, char* from, int file, int lineSize){
-    char* num;
-    char* copy;
-    copy = malloc(strlen(lines[lineSize-1]));
-    strcpy(copy, lines[lineSize-1]);
-
-    // write(file, "Last line ", strlen("Last line "));
-    // write(file, copy, strlen(copy));
-    // write(file, "\n", 1);
-
-    num = strtok(copy, " ");
-
-    *dirSize += atoi(num);
-
-    // write(file, "Adding ", strlen("Adding "));
-    // write(file, num, strlen(num));
-    // write(file, " to ", strlen(" to "));
-    // write(file, to, strlen(to));
-    // write(file, "\n", 1);
-
-    free(copy);
-}
-
-void freeLines(char** lines, int linesSize){
-    for (int i = 0; i < linesSize; i++){
-        memset(lines[i], 0, strlen(lines[i]));
-    }
 }
 

@@ -1,6 +1,6 @@
 #define LIMITER 1000000
 
-void write_create(char** cmd);
+void write_create();
 
 void write_exit(int exit_code);
 

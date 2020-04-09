@@ -40,12 +40,7 @@ int init(int all, int b, int B, int Bsize, int path,
     pid_t pid = 0;
     char fp[PATH_MAX];
 
-    char* cmd[10];
-
     int dirSize = 0;
-
-    int ppB[2];
-    pipe(ppB);
 
     if ((dirp = opendir(pathAd)) == NULL)
     {
@@ -56,6 +51,9 @@ int init(int all, int b, int B, int Bsize, int path,
         write_exit(2);
         exit(2);
     }
+
+    // int pp[2];
+    // if (pipe(pp) == -1) printf("Pipe error %s\n", strerror(errno));
 
     while ((direntp = readdir(dirp)) != NULL){
         int pp[2];
@@ -82,7 +80,6 @@ int init(int all, int b, int B, int Bsize, int path,
             if (all && (!mDepth || maxDepth > 0)) {
                 sprintf(sendFile, "%ld\t%s \n", num, fp);
                 write(STDOUT_FILENO, sendFile, strlen(sendFile));
-                send_pipe(sendFile);
             }
             
             dirSize += num;
@@ -99,7 +96,6 @@ int init(int all, int b, int B, int Bsize, int path,
                 char sendFile[50];
                 sprintf(sendFile, "%ld\t%s \n", num, fp);
                 write(STDOUT_FILENO, sendFile, strlen(sendFile));
-                send_pipe(sendFile);
             }
 
             dirSize += num;
@@ -110,42 +106,41 @@ int init(int all, int b, int B, int Bsize, int path,
             if(check_point_folders(directoryname)){
                 entry(stat_buf.st_size, B, Bsize, fp);
                 set_lasttime();
-                write_create(cmd);
+                write_create();
+                cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp, file);
                 pid = fork();
 
                 if (pid == 0 ){
                     if (mDepth) maxDepth--;
-                    cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp, cmd, file);
+                    int addSize = init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp);
+
                     close(pp[READ]);
-                    if (dup2(pp[WRITE], STDOUT_FILENO) == -1) printf("Dup error %s\n", strerror(errno));
-                    execvp("./simpledu", cmd);
+                    char* send = malloc(MAX_INPUT);
+                    sprintf(send, "%d", addSize);
+
+                    send_pipe(send);
+                    if (write(pp[WRITE], send, strlen(send)) == -1){
+                        perror("Writing to pipe");
+                        write_exit(4);
+                        exit(4);
+                    }
+
+                    free(send);
+                    closedir(dirp);
+                    write_exit(0);
+                    exit(0);
                 }
 
                 else if (pid > 0){
                     wait(&status);
-
-                    close(pp[WRITE]);
-                    char content[LIMITER];
-                    char copy[LIMITER];
-
-                    while (read(pp[READ], content, LIMITER)){
-                        strcpy(copy, content);
-
-                        receive_pipe(copy);
-
-                        char* lines[MAX_INPUT] = { '\0' };
-                        int linesSize = line_divider(copy, lines, file);
                         
-                        if (!S){
-                            add_initial_numbers(lines, &dirSize, pathAd, fp, file, linesSize);
-                        }
-
-                        if ((!mDepth || (maxDepth > 0))) {
-                            write(STDOUT_FILENO, content, strlen(content));
-                        }
-                        
-                        memset(content, 0, sizeof(content));
-                        freeLines(lines, linesSize);
+                    if (!S){
+                        close(pp[WRITE]);
+                        char* receive = malloc(MAX_INPUT);
+                        read(pp[READ], receive, MAX_INPUT);
+                        dirSize += atoi(receive);
+                        receive_pipe(receive);
+                        free(receive);
                     }
                 }
             }
@@ -159,16 +154,18 @@ int init(int all, int b, int B, int Bsize, int path,
     else{
         long tempSize = 4096;
         round_up_4096(&tempSize);
-        tempSize = tempSize / Bsize;
+        tempSize = tempSize / Bsize + (tempSize % Bsize != 0);
         dirSize += tempSize;
     }
 
-    char sendDir[50];
+    char* sendDir = malloc(MAX_INPUT);
     sprintf(sendDir,"%d\t%s \n", dirSize, pathAd);
-    send_pipe(sendDir);
-    write(STDOUT_FILENO, sendDir, strlen(sendDir));
+    if ((!mDepth || (maxDepth >= 0))) {
+        write(STDOUT_FILENO, sendDir, strlen(sendDir));
+    }
+    free(sendDir);
     
     closedir(dirp);
 
-    return 0;
+    return dirSize;
 }
