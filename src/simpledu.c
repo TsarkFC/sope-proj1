@@ -16,7 +16,6 @@
 //---Files
 #include "utils.h"
 #include "rec.h"
-#include "flags.h"
 #include "reg.h"
 
 // ./simpledu -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]
@@ -33,7 +32,12 @@ int file;
 
 int main(int argc, char *argv[]){
 
-    clock_t begin = set_initialtime();
+    struct timespec start;
+
+    if( clock_gettime( CLOCK_REALTIME, &start) == -1 ) {
+      perror( "clock gettime" );
+      exit( EXIT_FAILURE );
+    }
 
     //'boolean' variable initialization
     int all = 0;
@@ -48,7 +52,7 @@ int main(int argc, char *argv[]){
     if (argc > 10){ 
         write(STDOUT_FILENO, "USAGE: ./simpledu [-l] [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n",
         strlen("USAGE: ./simpledu [-l] [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n"));
-        write_exit(1);
+        write_exit(1, start);
         exit(1);
     }
 
@@ -59,7 +63,11 @@ int main(int argc, char *argv[]){
         if (strcmp(argv[i],"-a") == 0 || strcmp(argv[i],"-all") == 0) all = 1;
 
         //set for [-b]
-        else if (strcmp(argv[i],"-b") == 0) b = 1;
+        else if (strcmp(argv[i],"-b") == 0) {
+            b = 1;
+            B = 0;
+            Bsize = 1024;
+        }
 
         //set for [-B size]
         else if (strcmp(argv[i], "-B") == 0){
@@ -108,9 +116,9 @@ int main(int argc, char *argv[]){
         printf("File error (change) %s\n", strerror(errno));
     }
 
-    init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, pathAd);
+    init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, pathAd, start);
     
-    write_exit(0);
+    write_exit(0, start);
     close(file);
     return 0;
 }

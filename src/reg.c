@@ -20,69 +20,48 @@
 
 extern int file;
 
-long set_initialtime(){
-    clock_t begin = clock();
-    char time[50];
-    sprintf(time, "%ld", begin);
-    char* last;
-    if ((last = getenv("TIME")) != NULL){
-        long last_time =  begin + atoi(last);
-        char ltime[50];
-        sprintf(ltime, "%ld", last_time);
-        setenv("TIME", ltime, 1);
+double set_time(struct timespec start){
+    struct timespec stop;
+
+    if( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) {
+      perror( "clock gettime" );
+      exit( EXIT_FAILURE );
     }
-    else setenv("TIME", time, 1);
 
-    return begin;
-}
+    double ret = ( stop.tv_sec - start.tv_sec ) / 1000.0 + ( stop.tv_nsec - start.tv_nsec ) / 1000000.0;
 
-void set_lasttime(){
-    clock_t last = clock();
-
-    char time[50];
-    sprintf(time, "%ld", last + atoi(getenv("TIME")));
-    setenv("TIME", time, 0);
-}
-
-double set_time(){
-    long time = atoi(getenv("TIME"));
-
-    clock_t current = clock();
-
-    double ret = (double)(current + time) / CLOCKS_PER_SEC;
-    ret *= 1000;
     return ret;
 }
 
-void write_create(){
+void write_create(struct timespec start){
     char writecreate[10] = "CREATE";
     char create[50];
-    sprintf(create, "%f - %-8d - %-10s - ", set_time(), getpid(), writecreate);
+    sprintf(create, "%.2f - %-8d - %-10s - ", set_time(start), getpid(), writecreate);
     write(file, create, strlen(create));
 }
 
-void write_exit(int exit_code){
+void write_exit(int exit_code, struct timespec start){
     char writeexit[10] = "EXIT";
     char code[50];
-    sprintf(code, "%f - %-8d - %-10s - %d\n", set_time(), getpid(), writeexit, exit_code);
+    sprintf(code, "%.2f - %-8d - %-10s - %d\n", set_time(start), getpid(), writeexit, exit_code);
     write(file, code, strlen(code));
 }
 
-void receive_pipe(char* received){
+void receive_pipe(char* received, struct timespec start){
     char receivepipe[10] = "RECV_PIPE";
     char receive[LIMITER];
-    sprintf(receive, "%f - %-8d - %-10s - %s\n", set_time(), getpid(), receivepipe, received);
+    sprintf(receive, "%.2f - %-8d - %-10s - %s\n", set_time(start), getpid(), receivepipe, received);
     write(file, receive, strlen(receive));
 }
 
-void send_pipe(char* sent){
+void send_pipe(char* sent, struct timespec start){
     char sendpipe[10] = "SEND_PIPE";
     char send[PATH_MAX];
-    sprintf(send, "%f - %-8d - %-10s - %s\n", set_time(), getpid(), sendpipe, sent);
+    sprintf(send, "%.2f - %-8d - %-10s - %s\n", set_time(start), getpid(), sendpipe, sent);
     write(file, send, strlen(send));
 }
 
-void entry(long size, int B, int Bsize, char* path){
+void entry(long size, int B, int Bsize, char* path, struct timespec start){
     if (B){
         round_up_4096(&size);
         size = size / Bsize + (size % Bsize != 0);
@@ -90,6 +69,6 @@ void entry(long size, int B, int Bsize, char* path){
 
     char entry[10] = "ENTRY";
     char send[PATH_MAX];
-    sprintf(send, "%f - %-8d - %-10s - %-8ld %s\n", set_time(), getpid(), entry, size, path);
+    sprintf(send, "%.2f - %-8d - %-10s - %-8ld %s\n", set_time(start), getpid(), entry, size, path);
     write(file, send, strlen(send));
 }

@@ -12,24 +12,17 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <limits.h>
+#include <time.h>
 
 //---Files
 #include "utils.h"
-#include "flags.h"
 #include "reg.h"
 #include "rec.h"
 
 extern int file;
 
 int init(int all, int b, int B, int Bsize, int path, 
-            int L, int S, int mDepth, int maxDepth, char* pathAd){
-    /**USED FOR TESTING REASONS ONLY**/
-    //if (all) printf("Got all\n");
-    //if (b) printf("Got b\n");
-    //if (L) printf("Got -L\n");
-    //if (S) printf("Got -S\n");
-    //if (mDepth) printf("Got %d depth\n", maxDepth);
-    //if (B) printf("Got -B %d\n", Bsize);
+            int L, int S, int mDepth, int maxDepth, char* pathAd, struct timespec start){
 
     DIR *dirp;
     struct dirent *direntp;
@@ -48,12 +41,9 @@ int init(int all, int b, int B, int Bsize, int path,
         sprintf(test, "Path error: %s\n", pathAd);
         write(file, test, strlen(test));
         perror(pathAd);
-        write_exit(2);
+        write_exit(2, start);
         exit(2);
     }
-
-    // int pp[2];
-    // if (pipe(pp) == -1) printf("Pipe error %s\n", strerror(errno));
 
     while ((direntp = readdir(dirp)) != NULL){
         int pp[2];
@@ -63,20 +53,16 @@ int init(int all, int b, int B, int Bsize, int path,
 
         if (lstat(fp, &stat_buf)==-1){
             perror("lstat ERROR");
-            write_exit(3);
+            write_exit(3, start);
             exit(3);
         }
 
         if (S_ISREG(stat_buf.st_mode)) {
             long num = stat_buf.st_size;
-            entry(num, B, Bsize, fp);
+            entry(num, B, Bsize, fp, start);
             char sendFile[50];
 
-            // dirSize += num;
-
             if(!(b && !B)){
-                //round_up_4096(&num);
-                //num = (num) / Bsize + (num % Bsize != 0);
                 num = stat_buf.st_blocks*512/Bsize + ((stat_buf.st_blocks*512)%Bsize != 0);
                 dirSize += stat_buf.st_blocks*512;
             }
@@ -106,30 +92,29 @@ int init(int all, int b, int B, int Bsize, int path,
         else{
             strcpy(directoryname, direntp->d_name);
             if(check_point_folders(directoryname)){
-                entry(stat_buf.st_size, B, Bsize, fp);
-                set_lasttime();
-                write_create();
+                entry(stat_buf.st_size, B, Bsize, fp, start);
+                write_create(start);
                 cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp, file);
                 pid = fork();
 
                 if (pid == 0 ){
                     if (mDepth) maxDepth--;
-                    int addSize = init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp);
+                    int addSize = init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp, start);
 
                     close(pp[READ]);
                     char* send = malloc(MAX_INPUT);
                     sprintf(send, "%d", addSize);
 
-                    send_pipe(send);
+                    send_pipe(send, start);
                     if (write(pp[WRITE], send, strlen(send)) == -1){
                         perror("Writing to pipe");
-                        write_exit(4);
+                        write_exit(4, start);
                         exit(4);
                     }
 
                     free(send);
                     closedir(dirp);
-                    write_exit(0);
+                    write_exit(0, start);
                     exit(0);
                 }
 
@@ -141,7 +126,7 @@ int init(int all, int b, int B, int Bsize, int path,
                         char* receive = malloc(MAX_INPUT);
                         read(pp[READ], receive, MAX_INPUT);
                         dirSize += atoi(receive);
-                        receive_pipe(receive);
+                        receive_pipe(receive, start);
                         free(receive);
                     }
                 }
@@ -150,7 +135,6 @@ int init(int all, int b, int B, int Bsize, int path,
         }
     }
 
-    
     dirSize += 4096;
 
     char* sendDir = malloc(MAX_INPUT);
