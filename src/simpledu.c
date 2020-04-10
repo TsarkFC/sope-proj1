@@ -8,10 +8,15 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <linux/limits.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <time.h>
 
 //---Files
 #include "utils.h"
-#include "simpledu.h"
+#include "rec.h"
+#include "reg.h"
 
 // ./simpledu -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]
 
@@ -23,7 +28,29 @@
 // • -S, --separate-dirs – a informação exibida não inclui o tamanho dos subdiretórios;
 // • --max-depth=N – limita a informação exibida a N (0,1, …) níveis de profundidade de diretórios
 
+int file;
+
+
 int main(int argc, char *argv[]){
+
+    struct sigaction pause_signal;
+    pause_signal.sa_handler = sigint_handler;
+    sigemptyset(&pause_signal.sa_mask);
+    pause_signal.sa_flags = 0;
+
+    if (sigaction(SIGINT,&pause_signal,NULL) < 0)
+    {
+            fprintf(stderr,"Unable to install SIGINT handler\n");
+            exit(1);
+    }
+
+
+    struct timespec start;
+
+    if( clock_gettime( CLOCK_REALTIME, &start) == -1 ) {
+      perror( "clock gettime" );
+      exit( EXIT_FAILURE );
+    }
 
     //'boolean' variable initialization
     int all = 0;
@@ -34,22 +61,25 @@ int main(int argc, char *argv[]){
     int S = 0;
     int mDepth = 0; int maxDepth = 0; //maxDepth corresponds to max depth value
 
-    //worng usage
-    if (argc > 10 || argc < 2 || strcmp(argv[1], "-l") != 0){ 
-        write(STDOUT_FILENO, "USAGE: ./simpledu -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n",
-        strlen("USAGE: ./simpledu -l [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n"));
+    //wrong usage
+    if (argc > 10){ 
+        write(STDOUT_FILENO, "USAGE: ./simpledu [-l] [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n",
+        strlen("USAGE: ./simpledu [-l] [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n"));
+        write_exit(1, start);
         exit(1);
     }
-
     //interpret argv content
-    for (int i = 2; i < argc; i++){
-        //printf("Argument: %s\n", argv[i]);
+    for (int i = 1; i < argc; i++){
 
         //set fot [-a] or [-all]
         if (strcmp(argv[i],"-a") == 0 || strcmp(argv[i],"-all") == 0) all = 1;
 
         //set for [-b]
-        else if (strcmp(argv[i],"-b") == 0) b = 1;
+        else if (strcmp(argv[i],"-b") == 0) {
+            b = 1;
+            B = 0;
+            Bsize = 1024;
+        }
 
         //set for [-B size]
         else if (strcmp(argv[i], "-B") == 0){
@@ -67,7 +97,7 @@ int main(int argc, char *argv[]){
 
         //set for [--max-depth=N]
         else if (argv[i][0] == '-' && argv[i][1] == '-'){
-            char maxD[13];
+            char maxD[50];
             slice_str(argv[i], maxD, 0, 11);
             if (strcmp(maxD, "--max-depth=") == 0){
                 slice_str(argv[i], maxD, 12, 13);
@@ -75,6 +105,7 @@ int main(int argc, char *argv[]){
                 mDepth = 1;
             }
         }
+        else if (strcmp(argv[i],"-l") == 0) continue;
 
         //set for path
         else{
@@ -83,88 +114,32 @@ int main(int argc, char *argv[]){
         }
     }
 
-    init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, pathAd);
+    //Set default path
+    if (!path) strcpy(pathAd,".");
 
-    return 0;
-}
+    char log_file[MAX_INPUT];
 
-int init(int all, int b, int B, int Bsize, int path, 
-            int L, int S, int mDepth, int maxDepth, char* pathAd){
-    /**USED FOR TESTING REASONS ONLY**/
-    //if (all) printf("Got all\n");
-    //if (b) printf("Got b\n");
-    //if (L) printf("Got -L\n");
-    //if (S) printf("Got -S\n");
-    //if (mDepth) printf("Got %d depth\n", maxDepth);
-    //if (B) printf("Got -B %d\n", Bsize);
+    if (getenv("LOG_FILENAME") == NULL){
+        strcpy(log_file, "reg.txt");
+    }else strcpy(log_file, getenv("LOG_FILENAME"));
 
-    DIR *dirp;
-    struct dirent *direntp;
-    struct stat stat_buf;
-    char directoryname[150] = { '\0' };
-    
-    int status;
-    pid_t pid = 0;
-    char fp[PATH_MAX];
-    char paths[PATH_MAX];
+    file = open(log_file, O_CREAT | O_WRONLY | O_APPEND, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    if (file == -1){
+        printf("File error (change) %s\n", strerror(errno));
+    }
 
-    int dir_count = 0;
+    //Ignore signals
 
-    if ((dirp = opendir(pathAd)) == NULL)
+    pause_signal.sa_handler = sigint_handler;
+    if (sigaction(SIGINT,&pause_signal,NULL) < 0)
     {
-        perror(pathAd);
-        exit(2);
+            fprintf(stderr,"Unable to install SIGINT handler\n");
+            exit(1);
     }
 
-    while ((direntp = readdir(dirp)) != NULL){
-        snprintf(fp, sizeof(fp), "%s/%s", pathAd, direntp->d_name);
-        if (lstat(fp, &stat_buf)==-1)
-        {
-            perror("lstat ERROR");
-            exit(3);
-        }
-        if (S_ISREG(stat_buf.st_mode)) {
-            long num = stat_buf.st_size;
-
-            //send through pipe to main process
-
-            if (all) {
-                if(b && !B){
-                    printf("%-8ld %s \n", num, fp);
-                }
-                else{
-                    round_up_4096(&num);
-                    num = num / Bsize;
-                    printf("%-8ld %s \n", num, fp);
-                }
-            }
-        }
-        
-        else if (S_ISDIR(stat_buf.st_mode)) {
-            dir_count++;
-            strcpy(directoryname, direntp->d_name);
-            if(directoryname[0] != '.' || directoryname[1] != '\0'){
-                if(directoryname[1] != '.' || directoryname[2] != '\0'){
-                    printf("%-8ld %s \n", stat_buf.st_size, fp);
-                    pid = fork();
-
-                    if (pid == 0){
-                        char* cmd[10];
-                        cmd_builder(all, b, B, Bsize, path, L, S, mDepth, maxDepth, fp, cmd);
-                        execvp("./simpledu", cmd);
-                    }
-                    else if (pid > 0){
-                        wait(&status);
-                    }
-                }
-            }
-            memset(directoryname, 0, sizeof(directoryname));
-        }
-        
-    }
-    closedir(dirp);
-
+    init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, pathAd, start);
+    
+    write_exit(0, start);
+    close(file);
     return 0;
 }
-
-
