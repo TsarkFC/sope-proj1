@@ -1,6 +1,9 @@
 #include "utils.h"
+#include "reg.h"
 
 extern int file;
+
+extern struct timespec start;
 
 void slice_str(const char * str, char * buffer, size_t start, size_t end){
     size_t j = 0;
@@ -44,11 +47,6 @@ void cmd_builder(int all, int b, int B, int Bsize, int path, int L, int S, int m
 void round_up_4096(long * num){
 
     if (*num == 0) return;
-    // int no = 0;
-    // while(*num > no){
-    //     no += 4096;
-    // }
-    // *num = no;
 
     if (*num % 4096 != 0) *num = (*num / 4096) * 4096 + 4096;
 }
@@ -72,4 +70,50 @@ int check_point_folders(char* directoryname){
     }
     return 0;
 }
+
+void kill_all(int signal){
+    recv_signal("SIGTERM", start);
+    write(STDOUT_FILENO, "SIGTERM recieved!\n", sizeof("SIGTERM recieved!\n"));
+    send_signal("SIGTERM", start, getpgid(getpid()));
+    killpg(getpgid(getpid()), SIGTERM);
+    exit(0);
+}
+
+void continue_func(int signal){
+    recv_signal("SIGCONT", start);
+    write(STDOUT_FILENO, "SIGCONT recieved!\n", sizeof("SIGCONT recieved!\n"));
+    return;
+}
+
+void sigint_handler(int signal){
+    recv_signal("SIGINT", start);
+    write(STDOUT_FILENO, "\nThe program has been paused due to a SIGINT (Ctrl-c) signal. Send SIGTERM to stop the program or SIGCONT to continue the program.\n After a minute, the program will resume by default.\n", sizeof("\nThe program has been paused due to a SIGINT (Ctrl-c) signal. Send SIGTERM to stop the program or SIGCONT to continue the program.\n After a minut, the program will resume by default.\n"));
+
+    write(STDOUT_FILENO, "PID: ", sizeof("PID: "));
+
+    char num[50];
+    sprintf(num, "%d", getpid());
+    write(STDOUT_FILENO, num, strlen(num));
+    write(STDOUT_FILENO, "\n", sizeof("\n"));
+
+    //Instala os handlers de sigterm e sigcont
+    struct sigaction action1;
+    action1.sa_handler = kill_all;
+    sigemptyset(&action1.sa_mask);
+    action1.sa_flags = 0;
+    if (sigaction(SIGTERM,&action1,NULL) < 0)
+    {
+            fprintf(stderr,"Unable to install SIGTERM handler\n");
+            exit(1);
+    }
+    action1.sa_handler = continue_func;
+    if (sigaction(SIGCONT,&action1,NULL) < 0)
+    {
+            fprintf(stderr,"Unable to install SIGCONT handler\n");
+            exit(1);
+    }
+
+    sleep(60);
+}
+
 

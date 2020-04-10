@@ -29,10 +29,23 @@
 // • --max-depth=N – limita a informação exibida a N (0,1, …) níveis de profundidade de diretórios
 
 int file;
+struct timespec start;
 
 int main(int argc, char *argv[]){
 
-    struct timespec start;
+    struct sigaction pause_signal;
+    pause_signal.sa_handler = sigint_handler;
+    sigemptyset(&pause_signal.sa_mask);
+    pause_signal.sa_flags = 0;
+
+    if (sigaction(SIGINT,&pause_signal,NULL) < 0)
+    {
+            fprintf(stderr,"Unable to install SIGINT handler\n");
+            exit(1);
+    }
+
+
+    //struct timespec start;
 
     if( clock_gettime( CLOCK_REALTIME, &start) == -1 ) {
       perror( "clock gettime" );
@@ -48,22 +61,21 @@ int main(int argc, char *argv[]){
     int S = 0;
     int mDepth = 0; int maxDepth = 0; //maxDepth corresponds to max depth value
 
-    //worng usage
+    //wrong usage
     if (argc > 10){ 
         write(STDOUT_FILENO, "USAGE: ./simpledu [-l] [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n",
         strlen("USAGE: ./simpledu [-l] [path] [-a] [-b] [-B size] [-L] [-S] [--max-depth=N]\n"));
         write_exit(1, start);
         exit(1);
     }
-
     //interpret argv content
     for (int i = 1; i < argc; i++){
 
         //set fot [-a] or [-all]
-        if (strcmp(argv[i],"-a") == 0 || strcmp(argv[i],"-all") == 0) all = 1;
+        if (strcmp(argv[i],"-a") == 0 || strcmp(argv[i],"--all") == 0) all = 1;
 
         //set for [-b]
-        else if (strcmp(argv[i],"-b") == 0) {
+        else if (strcmp(argv[i],"-b") == 0 || strcmp(argv[i],"--bytes") == 0) {
             b = 1;
             B = 0;
             Bsize = 1024;
@@ -76,24 +88,33 @@ int main(int argc, char *argv[]){
                 Bsize = atoi(argv[i+1]); i++;
             }
         }
+        else if (argv[i][0] == '-' && argv[i][1] == '-' && argv[i][2] == 'b' && argv[i][3] == 'l'){
+            char block[50];
+            slice_str(argv[i], block, 0, 12);
+            if (strcmp(block, "--block-size=") == 0){
+                slice_str(argv[i], block, 13, strlen(argv[i])-1);
+                Bsize = atoi(block);
+                B = 1;
+            }
+        }
 
         //set for [-L]
-        else if (strcmp(argv[i],"-L") == 0) L = 1;
+        else if (strcmp(argv[i],"-L") == 0 || strcmp(argv[i],"--dereference") == 0) L = 1;
 
         //set for [-S]
-        else if (strcmp(argv[i],"-S") == 0) S = 1;
+        else if (strcmp(argv[i],"-S") == 0 || strcmp(argv[i],"--separate-dirs") == 0) S = 1;
 
         //set for [--max-depth=N]
-        else if (argv[i][0] == '-' && argv[i][1] == '-'){
+        else if (argv[i][0] == '-' && argv[i][1] == '-' && argv[i][2] == 'm'){
             char maxD[50];
             slice_str(argv[i], maxD, 0, 11);
             if (strcmp(maxD, "--max-depth=") == 0){
-                slice_str(argv[i], maxD, 12, 13);
+                slice_str(argv[i], maxD, 12, strlen(argv[i])-1);
                 maxDepth = atoi(maxD);
                 mDepth = 1;
             }
         }
-        else if (strcmp(argv[i],"-l") == 0) continue;
+        else if (strcmp(argv[i],"-l") == 0 || strcmp(argv[i],"--count-links") == 0) continue;
 
         //set for path
         else{
@@ -114,6 +135,15 @@ int main(int argc, char *argv[]){
     file = open(log_file, O_CREAT | O_WRONLY | O_APPEND, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
     if (file == -1){
         printf("File error (change) %s\n", strerror(errno));
+    }
+
+    //Ignore signals
+
+    pause_signal.sa_handler = sigint_handler;
+    if (sigaction(SIGINT,&pause_signal,NULL) < 0)
+    {
+            fprintf(stderr,"Unable to install SIGINT handler\n");
+            exit(1);
     }
 
     init(all, b, B, Bsize, path, L, S, mDepth, maxDepth, pathAd, start);

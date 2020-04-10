@@ -11,3 +11,7 @@ void receive_pipe(char* received, struct timespec start);
 void entry(long size, int B, int Bsize, char* path, struct timespec start);
 
 double set_time(struct timespec start);
+
+void send_signal(char* signal, struct timespec start, pid_t pid);
+
+void recv_signal(char* signal, struct timespec start);

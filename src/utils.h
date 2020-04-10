@@ -25,3 +25,5 @@ void int_to_char(int no, char* ch);
 _Bool is_number(char*a);
 
 int check_point_folders(char* directoryname);
+
+void sigint_handler(int signal);

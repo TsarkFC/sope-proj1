@@ -72,3 +72,15 @@ void entry(long size, int B, int Bsize, char* path, struct timespec start){
     sprintf(send, "%.2f - %-8d - %-10s - %-8ld %s\n", set_time(start), getpid(), entry, size, path);
     write(file, send, strlen(send));
 }
+
+void send_signal(char* signal, struct timespec start, pid_t pid){
+    char send[PATH_MAX];
+    sprintf(send, "%.2f\t - %-8d - SEND_SIGNAL - %-10s - %d\n", set_time(start), getpid(), signal, pid);
+    write(file, send, strlen(send));
+}
+
+void recv_signal(char* signal, struct timespec start){
+    char recv[PATH_MAX];
+    sprintf(recv, "%.2f\t - %-8d - RECV_SIGNAL - %-10s\n", set_time(start), getpid(), signal);
+    write(file, recv, strlen(recv));
+}
