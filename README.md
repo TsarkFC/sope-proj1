@@ -1,3 +1,5 @@
+# sope-simpledu
+
 - À partida todas as features estão ok, segundo aquilo que por nós foi testado (todas foram implementadas)
 
 - Nos computadores onde o programa foi testado obtivemos sempre os mesmos resultados
