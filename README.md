@@ -1,14 +1,13 @@
 # sope-simpledu
 
-- À partida todas as features estão ok, segundo aquilo que por nós foi testado (todas foram implementadas)
+Operating systems first project @ MIEIC, FEUP
 
-- Nos computadores onde o programa foi testado obtivemos sempre os mesmos resultados
+- [University course web page](https://sigarra.up.pt/feup/pt/ucurr_geral.ficha_uc_view?pv_ocorrencia_id=436440)
 
-- No princípio tentámos uma abordagem com fork() + exec(), mas encontrámos algumas dificuldades, tendo 
-mudado a abordagem para fork() + recursividade a qual se revelou mais simples.
+Simple implementation of the Unix command `du`. 
 
-- Relativamente ao envio de sinais após ser recebido um SIGINT é pedido ao utilizador que envie ou 
-SIGTERM ou SIGCONT através da linha de comandos para um processo com PID indicado no ecrã.
-Caso o utilizador não realize qualquer ação no minuto seguinte ao envio de CTRL-C (SIGINT) o programa 
-continua. 
+## Contents
 
+- [Test directory](example)
+- [Source code](src)
+- [Project specification](project.pdf)
