@@ -1,4 +1,4 @@
-# sope-simpledu
+# sope-proj1
 
 Operating systems first project @ MIEIC, FEUP
 
